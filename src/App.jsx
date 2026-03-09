@@ -5,6 +5,7 @@ function App() {
     <div>
 
       <h1>DayTree</h1>
+      
       <Daily />
 
     </div>
