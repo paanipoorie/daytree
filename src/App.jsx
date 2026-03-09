@@ -1,5 +1,13 @@
-function App() {
-  return <h1>Daytree</h1>
-}
+import Daily from "./pages/Daily";
 
-export default App
+function App() {
+  return (
+    <div>
+
+      <h1>DayTree</h1>
+      <Daily />
+
+    </div>
+  );
+}
+export default App;
