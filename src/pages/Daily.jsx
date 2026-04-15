@@ -5,61 +5,63 @@ import HabitForm from "../components/HabitForm";
 const STORAGE_KEY = "daytree_habits";
 
 function Daily() {
-  const [habits, setHabits] = useState([
-
-    { id: 1, name: "Drink water", time: "morning", completedDates: [] },
-    { id: 2, name: "Yoga", time: "morning", completedDates: [] },
-    { id: 3, name: "Study React", time: "afternoon", completedDates: [] },
-    { id: 4, name: "Basketball", time: "evening", completedDates: [] },
-    { id: 5, name: "Read book", time: "night", completedDates: [] }
-  ]);
-
-  useEffect(()=>{
+  const [habits, setHabits] = useState(() => {
     const storedHabits = localStorage.getItem(STORAGE_KEY);
 
-    if(storedHabits){
-     setHabits(JSON.parse(storedHabits));
-    }
-  },[]);
+    return storedHabits
+      ? JSON.parse(storedHabits)
+      : [
+          { id: 1, name: "Drink water", time: "morning", completedDates: [] },
+          { id: 2, name: "Yoga", time: "morning", completedDates: [] },
+          { id: 3, name: "Study React", time: "afternoon", completedDates: [] },
+          { id: 4, name: "Basketball", time: "evening", completedDates: [] },
+          { id: 5, name: "Read book", time: "night", completedDates: [] },
+        ];
+  });
 
-  useEffect(()=>{
-    localstorage.setItem(STORAGE_KEY,JSON,stringify(habits));
-  },[habits]);
-  
+  // Save habits whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
+  }, [habits]);
+
   function toggleHabit(habitId) {
     const today = new Date().toISOString().split("T")[0];
+
     const updatedHabits = habits.map((habit) => {
       if (habit.id === habitId) {
         const alreadyCompleted = habit.completedDates.includes(today);
 
         return {
           ...habit,
-          completedDates: alreadyCompleted ? habit.completedDates.filter(date => date !== today) :
-            [...habit.completedDates, today]
+          completedDates: alreadyCompleted
+            ? habit.completedDates.filter((date) => date !== today)
+            : [...habit.completedDates, today],
         };
-
       }
+
       return habit;
     });
-    //State Update
+
     setHabits(updatedHabits);
   }
 
-  function addHabit(formData){
+  function addHabit(formData) {
     const newHabit = {
       id: Date.now(),
       name: formData.name,
       time: formData.time,
-
-      completedDates:[],
+      completedDates: [],
     };
 
-    setHabits((prevHabits)=>[...prevHabits,newHabit]);
+    setHabits((prevHabits) => [...prevHabits, newHabit]);
   }
 
   return (
     <div>
       <h1>Track your daily habits</h1>
+
+      <HabitForm onAddHabit={addHabit} />
+
       <HabitList habits={habits} time="morning" title="Morning" toggleHabit={toggleHabit} />
       <HabitList habits={habits} time="afternoon" title="Afternoon" toggleHabit={toggleHabit} />
       <HabitList habits={habits} time="evening" title="Evening" toggleHabit={toggleHabit} />
@@ -67,4 +69,5 @@ function Daily() {
     </div>
   );
 }
+
 export default Daily;

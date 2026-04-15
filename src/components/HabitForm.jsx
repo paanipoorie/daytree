@@ -32,8 +32,9 @@ function HabitForm({onAddHabit}){
                 />
                 <select
                 value={time}
-                onChnage={(event)=> setTime(event.target.value)}
+                onChange={(event) => setTime(event.target.value)}
                 >
+
                     <option value="morning">Morning</option>
                     <option value="afternoon">Afternoon</option>
                     <option value="evening">Evening</option>
