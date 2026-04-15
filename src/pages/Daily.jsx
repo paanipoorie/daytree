@@ -30,6 +30,18 @@ function Daily() {
     sethabits(updatedHabits);
   }
 
+  function addHabit(formData){
+    const newHabit = {
+      id: Date.now(),
+      name: formData.name,
+      time: formData.time,
+
+      completedDates:[],
+    };
+
+    sethabits((prevHabits)=>[...prevHabits,newHabit]);
+  }
+
   return (
     <div>
       <h1>Track your daily habits</h1>
