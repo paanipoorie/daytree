@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HabitList from "../components/HabitList";
+import HabitForm from "../components/HabitForm";
+
+const STORAGE_KEY = "daytree_habits";
 
 function Daily() {
-  const [habits, sethabits] = useState([
+  const [habits, setHabits] = useState([
 
     { id: 1, name: "Drink water", time: "morning", completedDates: [] },
     { id: 2, name: "Yoga", time: "morning", completedDates: [] },
@@ -11,6 +14,18 @@ function Daily() {
     { id: 5, name: "Read book", time: "night", completedDates: [] }
   ]);
 
+  useEffect(()=>{
+    const storedHabits = localStorage.getItem(STORAGE_KEY);
+
+    if(storedHabits){
+     setHabits(JSON.parse(storedHabits));
+    }
+  },[]);
+
+  useEffect(()=>{
+    localstorage.setItem(STORAGE_KEY,JSON,stringify(habits));
+  },[habits]);
+  
   function toggleHabit(habitId) {
     const today = new Date().toISOString().split("T")[0];
     const updatedHabits = habits.map((habit) => {
@@ -27,7 +42,7 @@ function Daily() {
       return habit;
     });
     //State Update
-    sethabits(updatedHabits);
+    setHabits(updatedHabits);
   }
 
   function addHabit(formData){
@@ -39,7 +54,7 @@ function Daily() {
       completedDates:[],
     };
 
-    sethabits((prevHabits)=>[...prevHabits,newHabit]);
+    setHabits((prevHabits)=>[...prevHabits,newHabit]);
   }
 
   return (
