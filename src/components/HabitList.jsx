@@ -1,17 +1,21 @@
 import HabitItem from "./HabitItem";
 
-function HabitList({ habits, time, title,toggleHabit }) {
-  const filteredHabits = habits.filter(
-    (habit) => habit.time === time
-  );
+function HabitList({ habits, time, title, toggleHabit, deleteHabit }) {
+  const filteredHabits = habits.filter((habit) => habit.time === time);
 
   return (
-    <div>
+    <section className="habit-column">
       <h2>{title}</h2>
+
       {filteredHabits.map((habit) => (
-        <HabitItem key={habit.id} habit={habit} toggleHabit={toggleHabit}/>
+        <HabitItem
+          key={habit.id}
+          habit={habit}
+          toggleHabit={toggleHabit}
+          deleteHabit={deleteHabit}
+        />
       ))}
-    </div>
+    </section>
   );
 }
 

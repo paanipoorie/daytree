@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
-import HabitList from "../components/HabitList";
 import HabitForm from "../components/HabitForm";
+import HabitList from "../components/HabitList";
+import BacklogList from "../components/BacklogList";
+import {
+  formatReadableDate,
+  formatReadableTime,
+  getTodayKey,
+  isHabitBacklogged,
+} from "../utils/dates";
 
 const STORAGE_KEY = "daytree_habits";
 
-function Daily() {
+function Home() {
+  const [now, setNow] = useState(new Date());
+
   const [habits, setHabits] = useState(() => {
     const storedHabits = localStorage.getItem(STORAGE_KEY);
 
@@ -19,31 +28,17 @@ function Daily() {
         ];
   });
 
-  // Save habits whenever they change
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
   }, [habits]);
 
-  function toggleHabit(habitId) {
-    const today = new Date().toISOString().split("T")[0];
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
 
-    const updatedHabits = habits.map((habit) => {
-      if (habit.id === habitId) {
-        const alreadyCompleted = habit.completedDates.includes(today);
-
-        return {
-          ...habit,
-          completedDates: alreadyCompleted
-            ? habit.completedDates.filter((date) => date !== today)
-            : [...habit.completedDates, today],
-        };
-      }
-
-      return habit;
-    });
-
-    setHabits(updatedHabits);
-  }
+    return () => clearInterval(timerId);
+  }, []);
 
   function addHabit(formData) {
     const newHabit = {
@@ -56,18 +51,54 @@ function Daily() {
     setHabits((prevHabits) => [...prevHabits, newHabit]);
   }
 
+  function toggleHabit(habitId) {
+    const today = getTodayKey();
+
+    setHabits((prevHabits) =>
+      prevHabits.map((habit) => {
+        if (habit.id !== habitId) return habit;
+
+        const completedToday = habit.completedDates.includes(today);
+
+        return {
+          ...habit,
+          completedDates: completedToday
+            ? habit.completedDates.filter((date) => date !== today)
+            : [...habit.completedDates, today],
+        };
+      })
+    );
+  }
+
+  function deleteHabit(habitId) {
+    setHabits((prevHabits) =>
+      prevHabits.filter((habit) => habit.id !== habitId)
+    );
+  }
+
+  const backlogs = habits.filter((habit) => isHabitBacklogged(habit));
+
   return (
-    <div>
-      <h1>Track your daily habits</h1>
+    <main className="home-shell">
+      <aside className="control-panel">
+        <HabitForm onAddHabit={addHabit} />
 
-      <HabitForm onAddHabit={addHabit} />
+        <section className="date-panel">
+          <p className="today-date">{formatReadableDate(now)}</p>
+          <p className="current-time">{formatReadableTime(now)}</p>
+        </section>
 
-      <HabitList habits={habits} time="morning" title="Morning" toggleHabit={toggleHabit} />
-      <HabitList habits={habits} time="afternoon" title="Afternoon" toggleHabit={toggleHabit} />
-      <HabitList habits={habits} time="evening" title="Evening" toggleHabit={toggleHabit} />
-      <HabitList habits={habits} time="night" title="Night" toggleHabit={toggleHabit} />
-    </div>
+        <BacklogList habits={backlogs} />
+      </aside>
+
+      <section className="habit-board">
+        <HabitList habits={habits} time="morning" title="Morning" toggleHabit={toggleHabit} deleteHabit={deleteHabit} />
+        <HabitList habits={habits} time="afternoon" title="Afternoon" toggleHabit={toggleHabit} deleteHabit={deleteHabit} />
+        <HabitList habits={habits} time="evening" title="Evening" toggleHabit={toggleHabit} deleteHabit={deleteHabit} />
+        <HabitList habits={habits} time="night" title="Night" toggleHabit={toggleHabit} deleteHabit={deleteHabit} />
+      </section>
+    </main>
   );
 }
 
-export default Daily;
+export default Home;

@@ -1,15 +1,30 @@
-function HabitItem({ habit, toggleHabit}) {
+import { getTodayKey } from "../utils/dates";
 
-  const today = new Date().toISOString().split("T")[0];
-
+function HabitItem({ habit, toggleHabit, deleteHabit }) {
+  const today = getTodayKey();
   const completedToday = habit.completedDates.includes(today);
-  return (
-    <div>
 
-      <input type="checkbox" checked={completedToday} onChange={() => toggleHabit(habit.id)} />
+  return (
+    <div className="habit-item">
+      <input
+        type="checkbox"
+        checked={completedToday}
+        onChange={() => toggleHabit(habit.id)}
+      />
 
       <span>{habit.name}</span>
 
+      <button
+        className="delete-button"
+        type="button"
+        onClick={() => deleteHabit(habit.id)}
+        aria-label={`Delete ${habit.name}`}
+        title={`Delete ${habit.name}`}
+      >
+        <span className="trash-icon" aria-hidden="true">
+          <span />
+        </span>
+      </button>
     </div>
   );
 }

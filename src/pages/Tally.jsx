@@ -1,7 +1,7 @@
 function Tally() {
   return (
-    <main className="page-shell">
-      <section className="brutal-panel">
+    <main className="tally-shell">
+      <section className="tally-panel">
         <h1>Tally</h1>
         <p>Heatmap and streaks will come here.</p>
       </section>
