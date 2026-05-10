@@ -1,7 +1,7 @@
-import { getTodayKey } from "../utils/dates";
+import { getDateKey } from "../../../shared/utils/dateUtils";
 
-function HabitItem({ habit, toggleHabit, deleteHabit }) {
-  const today = getTodayKey();
+function HabitItem({ habit, onToggleHabit, onDeleteHabit }) {
+  const today = getDateKey();
   const completedToday = habit.completedDates.includes(today);
 
   return (
@@ -9,7 +9,7 @@ function HabitItem({ habit, toggleHabit, deleteHabit }) {
       <input
         type="checkbox"
         checked={completedToday}
-        onChange={() => toggleHabit(habit.id)}
+        onChange={() => onToggleHabit(habit.id)}
       />
 
       <span>{habit.name}</span>
@@ -17,7 +17,7 @@ function HabitItem({ habit, toggleHabit, deleteHabit }) {
       <button
         className="delete-button"
         type="button"
-        onClick={() => deleteHabit(habit.id)}
+        onClick={() => onDeleteHabit(habit.id)}
         aria-label={`Delete ${habit.name}`}
         title={`Delete ${habit.name}`}
       >

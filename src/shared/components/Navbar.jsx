@@ -1,13 +1,17 @@
-function Navbar({ currentPage, setCurrentPage }) {
+import BrandMark from "./BrandMark";
+
+function Navbar({ currentPage, onNavigate, onLogout }) {
   return (
     <header className="navbar">
-      <h1>DayTree</h1>
+      <h1>
+        <BrandMark />
+      </h1>
 
       <nav>
         <button
           type="button"
           className={`nav-link ${currentPage === "home" ? "active-nav" : ""}`}
-          onClick={() => setCurrentPage("home")}
+          onClick={() => onNavigate("home")}
         >
           Home
         </button>
@@ -15,12 +19,14 @@ function Navbar({ currentPage, setCurrentPage }) {
         <button
           type="button"
           className={`nav-link ${currentPage === "tally" ? "active-nav" : ""}`}
-          onClick={() => setCurrentPage("tally")}
+          onClick={() => onNavigate("tally")}
         >
           Tally
         </button>
 
-        <button className="logout-button" type="button">Logout</button>
+        <button className="logout-button" type="button" onClick={onLogout}>
+          Logout
+        </button>
       </nav>
     </header>
   );

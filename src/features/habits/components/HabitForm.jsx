@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { TIME_PERIODS } from "../../../shared/constants/timePeriods";
 
 function HabitForm({ onAddHabit }) {
   const [name, setName] = useState("");
@@ -8,6 +9,7 @@ function HabitForm({ onAddHabit }) {
   function handleSubmit(event) {
     event.preventDefault();
 
+    // trim() protects data quality by rejecting names that are only spaces.
     const cleanedName = name.trim();
 
     if (!cleanedName) {
@@ -37,10 +39,11 @@ function HabitForm({ onAddHabit }) {
       />
 
       <select value={time} onChange={(event) => setTime(event.target.value)}>
-        <option value="morning">Morning</option>
-        <option value="afternoon">Afternoon</option>
-        <option value="evening">Evening</option>
-        <option value="night">Night</option>
+        {TIME_PERIODS.map((period) => (
+          <option key={period.id} value={period.id}>
+            {period.label}
+          </option>
+        ))}
       </select>
 
       <button type="submit">Add</button>

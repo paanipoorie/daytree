@@ -1,24 +1,11 @@
-import { useState } from "react";
-
-import Navbar from "./components/Navbar";
-
-import Home from "./pages/Home";
-import Tally from "./pages/Tally";
+import { AppProviders } from "./app/providers/AppProviders";
+import AppRoutes from "./app/routes/AppRoutes";
 
 function App() {
-  
-  const [currentPage, setCurrentPage] = useState("home");
-
-  
   return (
-    <div className="app">
-      
-      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-
-      {currentPage === "home" && <Home />}
-
-      {currentPage === "tally" && <Tally />}
-    </div>
+    <AppProviders>
+      <AppRoutes />
+    </AppProviders>
   );
 }
 
