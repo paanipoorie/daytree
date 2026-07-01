@@ -1,28 +1,29 @@
+import { NavLink, Link } from "react-router-dom";
 import BrandMark from "./BrandMark";
 
-function Navbar({ currentPage, onNavigate, onLogout }) {
+function Navbar({ onLogout }) {
   return (
     <header className="navbar">
       <h1>
-        <BrandMark />
+        <Link to="/home" style={{ textDecoration: "none", color: "inherit" }}>
+          <BrandMark size="medium" />
+        </Link>
       </h1>
 
       <nav>
-        <button
-          type="button"
-          className={`nav-link ${currentPage === "home" ? "active-nav" : ""}`}
-          onClick={() => onNavigate("home")}
+        <NavLink
+          to="/home"
+          className={({ isActive }) => `nav-link ${isActive ? "active-nav" : ""}`}
         >
           Home
-        </button>
+        </NavLink>
 
-        <button
-          type="button"
-          className={`nav-link ${currentPage === "tally" ? "active-nav" : ""}`}
-          onClick={() => onNavigate("tally")}
+        <NavLink
+          to="/tally"
+          className={({ isActive }) => `nav-link ${isActive ? "active-nav" : ""}`}
         >
           Tally
-        </button>
+        </NavLink>
 
         <button className="logout-button" type="button" onClick={onLogout}>
           Logout

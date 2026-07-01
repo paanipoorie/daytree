@@ -39,6 +39,10 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
+  function completeOnboarding(profileData) {
+    setUser((prev) => (prev ? { ...prev, ...profileData, isOnboarded: true } : null));
+  }
+
   const value = {
     user,
     isAuthenticated: Boolean(user),
@@ -47,6 +51,7 @@ export function AuthProvider({ children }) {
     login,
     signup,
     logout,
+    completeOnboarding,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

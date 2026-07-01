@@ -1,0 +1,95 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../app/providers/authContext";
+import AuthTreePanel from "../components/AuthTreePanel";
+import BrandMark from "../../../shared/components/BrandMark";
+
+function ProfileSetupPage() {
+  const { completeOnboarding, user } = useAuth();
+  const navigate = useNavigate();
+  const [username, setUsername] = useState(user?.username || "");
+  const [avatar, setAvatar] = useState("");
+  const [avatarPreview, setAvatarPreview] = useState(null);
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAvatar(file.name);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    completeOnboarding({
+      username,
+      displayName: username,
+      avatar: avatarPreview || "",
+    });
+    navigate("/home");
+  };
+
+  return (
+    <main className="auth-shell">
+      <section className="auth-frame">
+        <form className="auth-card" onSubmit={handleSubmit}>
+          <BrandMark size="medium" />
+          <p className="auth-tagline">Set up your profile to continue.</p>
+
+          <h1>Welcome to DayTree</h1>
+          <p className="onboarding-subtitle">Tell us a bit about yourself</p>
+
+          {/* Profile Picture Section */}
+          <div className="auth-field profile-picture-setup">
+            <label className="field-label">Profile Picture</label>
+            <div className="avatar-onboarding-row">
+              <div className="avatar-preview-box">
+                {avatarPreview ? (
+                  <img src={avatarPreview} alt="Preview" className="avatar-preview-img" />
+                ) : (
+                  <span className="avatar-placeholder">?</span>
+                )}
+              </div>
+              <div className="avatar-upload-actions">
+                <label className="btn-file-upload">
+                  Upload Photo
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    style={{ display: "none" }}
+                  />
+                </label>
+                {avatar && <span className="upload-file-name">{avatar}</span>}
+              </div>
+            </div>
+          </div>
+
+          <div className="auth-field">
+            <label htmlFor="username" className="field-label">Username</label>
+            <input
+              id="username"
+              type="text"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="e.g. janesmith"
+            />
+          </div>
+
+          <button className="auth-submit" type="submit" style={{ marginTop: "24px" }}>
+            Continue
+          </button>
+        </form>
+
+        <AuthTreePanel />
+      </section>
+    </main>
+  );
+}
+
+export default ProfileSetupPage;
