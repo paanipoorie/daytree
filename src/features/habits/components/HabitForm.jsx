@@ -5,11 +5,11 @@ function HabitForm({ onAddHabit }) {
   const [name, setName] = useState("");
   const [time, setTime] = useState("morning");
   const [error, setError] = useState("");
+  const [isPending, setIsPending] = useState(false);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    // trim() protects data quality by rejecting names that are only spaces.
     const cleanedName = name.trim();
 
     if (!cleanedName) {
@@ -17,14 +17,20 @@ function HabitForm({ onAddHabit }) {
       return;
     }
 
-    onAddHabit({
-      name: cleanedName,
-      time,
-    });
-
+    setIsPending(true);
     setError("");
-    setName("");
-    setTime("morning");
+    try {
+      await onAddHabit({
+        name: cleanedName,
+        time,
+      });
+      setName("");
+      setTime("morning");
+    } catch (err) {
+      setError(err.message || "Failed to create habit.");
+    } finally {
+      setIsPending(false);
+    }
   }
 
   return (
@@ -35,10 +41,15 @@ function HabitForm({ onAddHabit }) {
         type="text"
         placeholder="Enter Habit Name"
         value={name}
+        disabled={isPending}
         onChange={(event) => setName(event.target.value)}
       />
 
-      <select value={time} onChange={(event) => setTime(event.target.value)}>
+      <select 
+        value={time} 
+        disabled={isPending} 
+        onChange={(event) => setTime(event.target.value)}
+      >
         {TIME_PERIODS.map((period) => (
           <option key={period.id} value={period.id}>
             {period.label}
@@ -46,7 +57,9 @@ function HabitForm({ onAddHabit }) {
         ))}
       </select>
 
-      <button type="submit">Add</button>
+      <button type="submit" disabled={isPending}>
+        {isPending ? "Adding..." : "Add"}
+      </button>
 
       {error && <p className="form-error">{error}</p>}
     </form>

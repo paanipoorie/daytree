@@ -69,6 +69,32 @@ function SignupPageRoute() {
 }
 
 function AppRoutes() {
+  const { isAuthLoading } = useAuth();
+
+  if (isAuthLoading) {
+    return (
+      <div 
+        className="initial-loading-container" 
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '90vh',
+          fontFamily: 'monospace',
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          backgroundColor: '#000',
+          color: '#fff',
+          border: '4px solid #fff',
+          boxSizing: 'border-box',
+          margin: '2rem',
+        }}
+      >
+        Loading DayTree...
+      </div>
+    );
+  }
+
   return (
     <Routes>
       {/* Public Routes */}

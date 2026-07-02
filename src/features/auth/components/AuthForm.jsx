@@ -36,6 +36,7 @@ function AuthForm({ mode, error, isLoading, onSubmit, onModeChange }) {
             type="email"
             name="email"
             value={values.email}
+            disabled={isLoading}
             onChange={updateField}
           />
 
@@ -45,10 +46,11 @@ function AuthForm({ mode, error, isLoading, onSubmit, onModeChange }) {
               type={showPassword ? "text" : "password"}
               name="password"
               value={values.password}
+              disabled={isLoading}
               onChange={updateField}
             />
 
-            <button type="button" onClick={togglePasswordVisibility}>
+            <button type="button" disabled={isLoading} onClick={togglePasswordVisibility}>
               {showPassword ? "Hide" : "Show"}
             </button>
           </div>
@@ -56,9 +58,9 @@ function AuthForm({ mode, error, isLoading, onSubmit, onModeChange }) {
           {isLogin && (
             <div className="auth-options">
               <label>
-                <input type="checkbox" /> Remember me
+                <input type="checkbox" disabled={isLoading} /> Remember me
               </label>
-              <button type="button">Forgot Password?</button>
+              <button type="button" disabled={isLoading}>Forgot Password?</button>
             </div>
           )}
 

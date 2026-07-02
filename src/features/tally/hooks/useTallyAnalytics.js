@@ -1,28 +1,41 @@
-import { calculateStreaks } from "../utils/calculateStreaks";
-import { generateHeatmapData } from "../utils/generateHeatmapData";
+import { useState, useEffect } from "react";
+import { apiClient } from "../../../shared/utils/apiClient";
 
-export function useTallyAnalytics(habits) {
-  const heatmapData = generateHeatmapData(habits);
-  const { currentStreak, longestStreak } = calculateStreaks(heatmapData);
+/**
+ * Hook to fetch tally and heatmap analytics from backend API
+ * @returns {Object} Heatmap data, streaks, daily average, loading state, and error message
+ */
+export function useTallyAnalytics() {
+  const [analytics, setAnalytics] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const daysWithProgress = heatmapData.filter(
-    (day) => day.completionRate !== null
-  );
+  useEffect(() => {
+    async function loadAnalytics() {
+      setIsLoading(true);
+      setError("");
+      try {
+        const response = await apiClient("/api/v1/tally", {
+          method: "GET",
+        });
+        setAnalytics(response.data);
+      } catch (err) {
+        console.error("Failed to load tally analytics:", err.message);
+        setError("Could not retrieve your consistency analytics. Please check back later.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
-  const dailyAverage =
-    daysWithProgress.length === 0
-      ? 0
-      : Math.round(
-          daysWithProgress.reduce(
-            (total, day) => total + day.completionRate,
-            0
-          ) / daysWithProgress.length
-        );
+    loadAnalytics();
+  }, []);
 
   return {
-    heatmapData,
-    dailyAverage,
-    currentStreak,
-    longestStreak,
+    heatmapData: analytics?.heatmapData || [],
+    dailyAverage: analytics?.dailyAverage || 0,
+    currentStreak: analytics?.currentStreak || 0,
+    longestStreak: analytics?.longestStreak || 0,
+    isLoading,
+    error,
   };
 }

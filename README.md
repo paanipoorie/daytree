@@ -1,252 +1,143 @@
-# DayTree
+# 🌿 DayTree
 
-DayTree is a habit tracking dashboard built as a project-based MERN learning application. The product is designed around daily execution: users create habits, complete them by time of day, review missed habits in backlogs, and track long-term consistency through analytics.
+DayTree is a professional, production-ready MERN habit tracking application designed around daily execution, period-based scheduling, and long-term consistency metrics. 
 
-The current implementation is a frontend-first React application with production-style structure. Backend integration with Node.js, Express, MongoDB, and JWT authentication is planned.
+It is constructed with a highly structured, feature-based architecture and features a striking, minimal Brutalist design.
 
-## Features
+---
 
-- Brutalist dashboard UI with a structured product layout.
-- Login and signup UI with frontend-ready authentication architecture.
-- Home dashboard for daily habit tracking.
-- Habit grouping by time period: Morning, Afternoon, Evening, Night.
-- Add, complete, and delete habits.
-- Backlog detection for habits missed after their scheduled time window.
-- Local persistence through a service abstraction.
-- Tally analytics page with heatmap, daily average, current streak, and longest streak.
-- Feature-based frontend architecture prepared for backend integration.
+## 📸 Screenshots & Previews
 
-## Tech Stack
+### 1. Habit Dashboard (Daily Board)
+![DayTree Dashboard](public/main-page.png)
 
-- React 19
-- Vite
-- JavaScript
-- CSS
-- ESLint
+### 2. Secure Authenticated Gate
+![DayTree Auth Portal](public/auth-tree.png)
 
-Planned backend stack:
+---
 
-- Node.js
-- Express.js
-- MongoDB
-- JWT authentication
+## ✨ Features
 
-## Project Structure
+* **Brutalist Monospaced UI**: A bold, clean, accessibility-compliant monochrome layout that prioritizes usability.
+* **Period-Based Habit Tracking**: Organize habits into dedicated time blocks (Morning, Afternoon, Evening, Night) to structure your daily routine.
+* **Unified Analytics Engine**: Computes daily averages, completion streaks, and compiles dynamic heatmap metrics directly on the server to prevent heavy frontend CPU utilization.
+* **Intelligent Backlog Detection**: Automatically lists past habits that were missed during their designated time window to encourage user catch-ups.
+* **Robust Security Controls**: Protected routes, JWT token session management, Helmet headers, express body-size protection (100kb limit), and custom MongoDB operator sanitizers to guard against script injections.
+* **Granular IP Rate Limiter**: Enforces strict endpoint throttling (100 requests / 15 minutes globally; 15 requests / 15 minutes for security-critical Auth/Multer endpoints).
+* **Observability & Request Tracing**: Assigns and appends UUID request-tracking headers (`X-Request-Id`) across logs, error responses, and audit hooks.
 
-```text
-src/
-├── app/
-│   ├── layouts/
-│   ├── providers/
-│   └── routes/
-├── features/
-│   ├── auth/
-│   ├── habits/
-│   └── tally/
-├── shared/
-│   ├── components/
-│   ├── constants/
-│   └── utils/
-├── App.jsx
-├── index.css
-└── main.jsx
-```
+---
 
-## Architecture
+## 🛠 Tech Stack
 
-DayTree uses a feature-based frontend architecture.
+### Frontend
+* **Core**: React 19, Vite, Javascript
+* **Routing**: React Router DOM (v7)
+* **Styling**: Vanilla CSS (Custom Brutalist Monochrome design tokens)
 
-The `app/` folder contains application-level wiring: providers, routes, and layouts.
+### Backend
+* **Core**: Node.js, Express.js
+* **Database**: MongoDB Atlas, Mongoose
+* **Auth**: JWT, bcrypt
+* **File Upload**: Multer, Cloudinary API
+* **Security & Observability**: Helmet, Express Mongo Sanitize, Express Rate Limit, UUID Request Tracer, Audit Service logger
+* **Testing**: Jest, Supertest (28 comprehensive integration test specs)
 
-The `features/` folder contains product domains. Each feature owns its components, hooks, services, pages, and utilities.
+---
 
-The `shared/` folder contains reusable code that is not specific to one feature, such as branding components, date helpers, and time period constants.
-
-This separation keeps UI rendering, state management, persistence, and analytics logic from being mixed inside one large component.
-
-## Data Model
-
-Habit objects currently use this shape:
-
-```js
-{
-  id: "string",
-  name: "Read book",
-  time: "night",
-  createdAt: "2026-05-10",
-  completedDates: ["2026-05-10"]
-}
-```
-
-`completedDates` stores history instead of a single `completed` boolean. This supports heatmaps, streaks, completion percentages, and future backend analytics.
-
-## Time Windows
-
-Habits are assigned to one of four time periods:
+## 📁 Repository Directory Structure
 
 ```text
-Morning:   5:00 AM - 12:00 PM
-Afternoon: 12:00 PM - 5:00 PM
-Evening:   5:00 PM - 8:30 PM
-Night:     8:30 PM - 12:00 AM
+daytree/
+├── .github/                 # GitHub workflows & issue/PR templates
+├── backend/                 # Node & Express microservice folder
+│   ├── src/
+│   │   ├── config/          # Central configuration (DB, Cloudinary, Env)
+│   │   ├── controllers/     # Controller handlers (Auth, Habits, Users, Tally)
+│   │   ├── middleware/      # Global hooks (Auth guard, Rate Limiter, Error Handler, Tracer)
+│   │   ├── models/          # Database models (User, Habit, HabitCompletion)
+│   │   ├── routes/          # Router paths mapping endpoints to controllers
+│   │   ├── services/        # Decoupled business engines (Tally calculations)
+│   │   ├── utils/           # Shared response formats & helpers
+│   │   ├── validators/      # Route parameter Zod schemas
+│   │   ├── app.js           # Express app configuring middleware & routing
+│   │   └── server.js        # Server bootstrapping & OS signal listeners
+│   ├── tests/               # Sequential Supertest integration suite
+│   ├── .env.example         # Template for environment variables
+│   └── package.json         # Backend dependency lock
+├── public/                  # Static assets & brand graphics
+├── src/                     # React Single Page Application (SPA) source
+│   ├── app/                 # Providers, layout templates, routing guards
+│   ├── features/            # Feature-focused modules (Auth, Habits, Tally pages)
+│   └── shared/              # Reusable generic widgets, helpers, constants
+├── API.md                   # Full endpoint parameter specifications
+├── DEPLOYMENT.md            # Render/Vercel/Atlas cloud manual
+├── LICENSE                  # MIT License
+└── package.json             # Root dependency configuration
 ```
 
-If a habit is not completed before its time window ends, it appears in Backlogs.
+---
 
-## Tally Analytics
-
-The Tally page derives analytics from habit history.
-
-Completion percentage:
-
-```text
-completed habits / active habits for that day
-```
-
-Heatmap color rules:
-
-```text
-100% completed  -> darkest green
-70-99%          -> green
-50-69%          -> light green
-1-49%           -> very light green
-0% or no data   -> grey
-```
-
-Streaks currently count days where completion is 100%.
-
-## Getting Started
+## 🚀 Local Quickstart
 
 ### Prerequisites
+* [Node.js](https://nodejs.org/) (v18+)
+* [Docker Desktop](https://www.docker.com/) (to run local MongoDB container)
 
-- Node.js
-- npm
-
-### Installation
-
+### 1. Database Setup
+Spin up a local MongoDB container:
 ```bash
-npm install
+# Pull and start MongoDB
+docker run -d --name daytree-mongo -p 27017:27017 mongo:latest
 ```
 
-### Development
-
-```bash
-npm run dev
-```
-
-Vite will print a local development URL, usually:
-
-```text
-http://127.0.0.1:5173/
-```
-
-### Lint
-
-```bash
-npm run lint
-```
-
-### Production Build
-
-```bash
-npm run build
-```
-
-### Preview Build
-
-```bash
-npm run preview
-```
-
-## Environment Variables
-
-The backend relies on environment variables configured in `backend/.env`. A template is provided in `backend/.env.example`.
-
-Key environment variables:
-* `PORT`: Port to run the server on (default: `5000`).
-* `MONGODB_URI`: MongoDB connection string (e.g. `mongodb://localhost:27017/daytree`).
-* `JWT_SECRET`: Secret key used for signing JWTs.
-* `JWT_EXPIRES_IN`: JWT expiration length (default: `7d`).
-* `CORS_ORIGIN`: Approved CORS origin for production (default: `http://localhost:5173`).
-* `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`: Credentials for profile picture uploads.
-
-## Backend Setup & Operations
-
-### 1. Prerequisites
-Ensure you have `Node.js` (v18+) and `Docker` installed on your machine.
-
-### 2. Start the Local Database
-Run the MongoDB database inside Docker:
-```bash
-# Start a new container
-docker run -d --name daytree-mongo -p 27017:27017 mongo:7.0
-
-# Or start the container if it already exists
-docker start daytree-mongo
-```
-
-### 3. Install Dependencies & Configure
+### 2. Backend Installation & Start
+Navigate to the backend, set up environment secrets, and run in dev mode:
 ```bash
 cd backend
 npm install
 cp .env.example .env
-```
-Fill in the variables in `.env` (particularly `JWT_SECRET`).
 
-### 4. Running the Server
-```bash
-# Development mode (with nodemon)
+# Run development server
 npm run dev
-
-# Production mode
-npm start
 ```
 
-### 5. Running Tests
-Run the comprehensive integration test suite (covering Auth, Habits, Completions, and Tally Analytics):
+### 3. Frontend Installation & Start
+Open a new terminal window in the root project folder:
 ```bash
+# Install dependencies
+npm install
+
+# Start Vite dev server
+npm run dev
+```
+Open [http://localhost:5173/](http://localhost:5173/) in your web browser.
+
+### 4. Running Backend Tests
+Execute the automated Supertest validation suite:
+```bash
+cd backend
 npm test
 ```
 
-## API Endpoint Overview
+---
 
-All endpoints are versioned under `/api/v1` and return structured JSON responses.
+## ☁️ Deployment Specifications
 
-### Centralized Response Formats
-* **Success**: `{ success: true, message: "...", data: {} }`
-* **Error**: `{ success: false, message: "...", errors: [...], requestId: "..." }`
+* **Database**: MongoDB Atlas Cluster.
+* **Backend**: Deployed to Render (utilizes `trust proxy: 1` settings to read client IPs safely behind load balancers).
+* **Frontend**: Deployed to Vercel (points to the Render domain using the environment variable `VITE_API_BASE_URL`).
 
-### Endpoints
-* **Authentication (`/api/v1/auth`)**:
-  * `POST /signup` - Register a new account.
-  * `POST /login` - Login and receive a JWT.
-  * `GET /me` - Get current user profile details (protected).
-  * `POST /logout` - Log out current session (protected).
-* **Users (`/api/v1/users`)**:
-  * `POST /setup-profile` - Upload profile picture and update username (protected, supports `multipart/form-data` uploads).
-* **Habits (`/api/v1/habits`)**:
-  * `GET /` - Retrieve active habits (protected).
-  * `POST /` - Create a new habit (protected).
-  * `PATCH /:id` - Edit habit metadata or archive status (protected).
-  * `DELETE /:id` - Soft-delete / archive a habit (protected).
-  * `POST /:id/toggle` - Toggle habit completion state for a date key `YYYY-MM-DD` (protected).
-* **Tally Analytics (`/api/v1/tally`)**:
-  * `GET /` - Fetch unified dashboard analytics including heatmap grid, streaks, daily average, and active summaries (protected).
+For detailed instructions on cloud deployment, reference the [DEPLOYMENT.md](DEPLOYMENT.md) guide.
 
-## Git Hygiene
+---
 
-Do not commit:
-- `node_modules/`
-- `dist/`
-- `.env`
-- local editor/cache files
+## 🗺 Future Roadmap
+* **Habit Reminders**: Support push notifications and email integrations.
+* **Personal Goals**: Expose user custom goals and target streaks.
+* **Visual Themes**: Toggle support for brutalist color matrices (e.g. amber, emerald neon).
 
-Commit:
-- source files
-- static assets in `public/`
-- configuration files
-- `package-lock.json`
+---
 
-## Learning Goal
-
-DayTree is intentionally built through project-based learning. The goal is not only to finish a habit tracker, but to learn how real applications are structured: state flow, feature boundaries, service abstraction, analytics logic, and backend integration planning.
+## 📄 License
+This project is open-source software licensed under the [MIT License](LICENSE).

@@ -38,7 +38,9 @@ export async function apiClient(url, options = {}) {
     body = JSON.stringify(body);
   }
   
-  const response = await fetch(url, {
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
+  const response = await fetch(`${BASE_URL}${url}`, {
     ...options,
     headers,
     body,

@@ -2,6 +2,17 @@ const env = require('../config/env');
 const { sendError } = require('../utils/apiResponse');
 
 const errorHandler = (err, req, res, next) => {
+  // Log the error on the server for observability (skip in test mode)
+  if (env.NODE_ENV !== 'test') {
+    console.error(JSON.stringify({
+      requestId: req.requestId,
+      timestamp: new Date().toISOString(),
+      level: 'ERROR',
+      message: err.message,
+      stack: err.stack,
+    }));
+  }
+
   let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   let message = err.message || 'Server error';
   let errorsList = [];

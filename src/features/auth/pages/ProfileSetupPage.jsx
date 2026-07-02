@@ -5,7 +5,7 @@ import AuthTreePanel from "../components/AuthTreePanel";
 import BrandMark from "../../../shared/components/BrandMark";
 
 function ProfileSetupPage() {
-  const { completeOnboarding, user } = useAuth();
+  const { completeOnboarding, user, isAuthLoading, authError } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState(user?.username || "");
   const [avatar, setAvatar] = useState("");
@@ -13,6 +13,7 @@ function ProfileSetupPage() {
   const [avatarFile, setAvatarFile] = useState(null);
 
   const handleAvatarChange = (e) => {
+    if (isAuthLoading) return;
     const file = e.target.files[0];
     if (file) {
       setAvatar(file.name);
@@ -27,6 +28,7 @@ function ProfileSetupPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isAuthLoading) return;
     try {
       await completeOnboarding(username, avatarFile);
       navigate("/home");
@@ -57,11 +59,12 @@ function ProfileSetupPage() {
                 )}
               </div>
               <div className="avatar-upload-actions">
-                <label className="btn-file-upload">
+                <label className={`btn-file-upload ${isAuthLoading ? "disabled" : ""}`} style={{ pointerEvents: isAuthLoading ? "none" : "auto", opacity: isAuthLoading ? 0.6 : 1 }}>
                   Upload Photo
                   <input
                     type="file"
                     accept="image/*"
+                    disabled={isAuthLoading}
                     onChange={handleAvatarChange}
                     style={{ display: "none" }}
                   />
@@ -77,14 +80,17 @@ function ProfileSetupPage() {
               id="username"
               type="text"
               required
+              disabled={isAuthLoading}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="e.g. janesmith"
             />
           </div>
 
-          <button className="auth-submit" type="submit" style={{ marginTop: "24px" }}>
-            Continue
+          {authError && <p className="form-error" style={{ margin: "1rem 0 0 0" }}>{authError}</p>}
+
+          <button className="auth-submit" type="submit" disabled={isAuthLoading} style={{ marginTop: "24px" }}>
+            {isAuthLoading ? "Saving..." : "Continue"}
           </button>
         </form>
 

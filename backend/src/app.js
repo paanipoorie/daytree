@@ -11,6 +11,9 @@ const { generalLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
 
+// Trust reverse proxy (Render, Vercel, Heroku, etc.) to get correct client IP
+app.set('trust proxy', 1);
+
 // Request Tracing (runs first to generate requestId)
 app.use(requestTracer);
 
@@ -38,7 +41,12 @@ app.use(mongoSanitize());
 
 // Health check endpoint
 app.get('/api/v1/health', (req, res) => {
-  res.status(200).json({ status: 'ok' });
+  res.status(200).json({
+    status: 'ok',
+    uptime: process.uptime(),
+    environment: env.NODE_ENV,
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // Import Routes
