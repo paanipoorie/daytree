@@ -14,7 +14,7 @@ describe('Habit Completions API Integration Tests', () => {
   let habit;
 
   beforeAll(async () => {
-    const testUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/daytree_test';
+    const testUri = process.env.MONGODB_TEST_URI || 'mongodb://localhost:27017/daytree_test';
     await mongoose.connect(testUri);
   });
 

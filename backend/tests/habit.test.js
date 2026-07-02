@@ -12,7 +12,7 @@ describe('Habits API Integration Tests', () => {
   let token1, token2;
 
   beforeAll(async () => {
-    const testUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/daytree_test';
+    const testUri = process.env.MONGODB_TEST_URI || 'mongodb://localhost:27017/daytree_test';
     await mongoose.connect(testUri);
   });
 

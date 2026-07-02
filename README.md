@@ -65,15 +65,20 @@ daytree/
 │   ├── tests/               # Sequential Supertest integration suite
 │   ├── .env.example         # Template for environment variables
 │   └── package.json         # Backend dependency lock
-├── public/                  # Static assets & brand graphics
-├── src/                     # React Single Page Application (SPA) source
-│   ├── app/                 # Providers, layout templates, routing guards
-│   ├── features/            # Feature-focused modules (Auth, Habits, Tally pages)
-│   └── shared/              # Reusable generic widgets, helpers, constants
+├── frontend/                # React Single Page Application (SPA) folder
+│   ├── src/
+│   │   ├── app/             # Providers, layout templates, routing guards
+│   │   ├── features/        # Feature-focused modules (Auth, Habits, Tally pages)
+│   │   └── shared/          # Reusable generic widgets, helpers, constants
+│   ├── public/              # Static assets & brand graphics
+│   ├── vite.config.js       # Vite configuration
+│   ├── eslint.config.js     # ESLint configuration
+│   ├── .env.example         # Template for frontend env variables
+│   └── package.json         # Frontend dependency lock
 ├── API.md                   # Full endpoint parameter specifications
 ├── DEPLOYMENT.md            # Render/Vercel/Atlas cloud manual
 ├── LICENSE                  # MIT License
-└── package.json             # Root dependency configuration
+└── README.md                # Repository overview & startup instructions
 ```
 
 ---
@@ -91,41 +96,48 @@ Spin up a local MongoDB container:
 docker run -d --name daytree-mongo -p 27017:27017 mongo:latest
 ```
 
-### 2. Backend Installation & Start
-Navigate to the backend, set up environment secrets, and run in dev mode:
+### 2. Backend Setup
+Navigate to the backend, install dependencies, and set up environment secrets:
 ```bash
 cd backend
 npm install
 cp .env.example .env
 ```
 Ensure you open the newly created `.env` file and configure the following variables:
-* `RESEND_API_KEY`: Obtain this by signing up on [Resend](https://resend.com) and generating an API key. (If not configured in development, a clear warning will be shown).
-* `EMAIL_FROM`: Set to a verified sender identity on Resend (defaults to `DayTree <noreply@yourdomain.com>`).
-* `GOOGLE_CLIENT_ID`: Your Google OAuth client ID (from Google Developer Console) for Google Sign-In verification.
+* `MONGODB_URI`: Set to `mongodb://localhost:27017/daytree` (default local) or your **MongoDB Atlas** connection string.
+* `MONGODB_TEST_URI`: (Optional) Dedicated MongoDB connection URI for running integration tests. Recommended if you use an Atlas cluster for `MONGODB_URI` so tests do not wipe your development/production database.
+* `RESEND_API_KEY`: Resend API key for OTP delivery.
+* `EMAIL_FROM`: Verified sender identity on Resend.
+* `GOOGLE_CLIENT_ID`: Google OAuth client ID for Google Sign-In verification.
 
-Now run the development server:
+### 3. Frontend Setup
+Navigate to the frontend, install dependencies:
 ```bash
-# Run development server
-npm run dev
-```
-
-### 3. Frontend Installation & Start
-Open a new terminal window in the root project folder:
-```bash
-# Install dependencies
+cd frontend
 npm install
-
-# Start Vite dev server
-npm run dev
 ```
-Open [http://localhost:5173/](http://localhost:5173/) in your web browser.
 
-### 4. Running Backend Tests
-Execute the automated Supertest validation suite:
-```bash
-cd backend
-npm test
-```
+### 4. Running the Application (Monorepo Convenience Scripts)
+Since the repository is structured as a full-stack monorepo, you can run convenience scripts directly from the workspace root:
+
+*   **Start Backend Developer Server**:
+    ```bash
+    npm run backend
+    ```
+*   **Start Frontend Developer Server**:
+    ```bash
+    npm run frontend
+    ```
+*   **Build Frontend Bundle**:
+    ```bash
+    npm run frontend:build
+    ```
+*   **Run Backend Integration Tests**:
+    ```bash
+    npm run backend:test
+    ```
+
+You can still navigate into `/backend` or `/frontend` to execute standard subdirectory commands if preferred.
 
 ---
 

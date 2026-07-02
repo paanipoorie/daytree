@@ -22,7 +22,7 @@ This guide details the step-by-step process of deploying the DayTree habit track
 ## 🚀 Recommended Deployment Order
 
 To ensure a smooth launch, follow this sequence:
-1. **Database Setup**: Deploy MongoDB Atlas first, obtain the connection string.
+1. **Database Setup**: Deploy MongoDB Atlas first, obtain the connection string, and update your backend `.env` file (local) or hosting service environment variables (production).
 2. **Backend Deployment**: Deploy the Express backend on Render, injecting Atlas and Cloudinary secrets.
 3. **Frontend Deployment**: Deploy the React frontend on Vercel, injecting the Render backend API URL.
 
@@ -31,19 +31,31 @@ To ensure a smooth launch, follow this sequence:
 ## 🗄 Step 1: MongoDB Atlas Setup
 
 1. **Sign Up / Login**: Log in to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
-2. **Create a Project & Cluster**: Create a new project named `DayTree` and spin up a free shared cluster (`M0` sandbox) in your preferred region.
+2. **Create a Project & Cluster**: Create a new project named `DayTree` and spin up a free shared cluster (`M0` sandbox) in your preferred region (e.g., AWS us-east-1 or similar).
 3. **Network Access Setup**:
    * Navigate to **Network Access** under Security.
    * Click **Add IP Address**.
-   * Use `0.0.0.0/0` (allow access from anywhere) only if your hosting provider's outbound IPs are dynamic (e.g. Render free instances). Otherwise, restrict access to your hosting provider's static IP(s) whenever possible.
+   * To allow access from anywhere (necessary for dynamic environments like local dev or Render free web services), add `0.0.0.0/0`.
+   * For production, restrict to your hosting provider's static IP(s) if possible.
 4. **Database Access Setup**:
    * Navigate to **Database Access**.
    * Click **Add New Database User**.
-   * Select **Read and write to any database** and create credentials. Store the password securely.
+   * Choose **Password** authentication, create a database username (e.g., `daytree-user`), and generate/choose a strong password.
+   * Under **Database User Privileges**, select **Read and write to any database** (or restrict explicitly to the `daytree` database).
 5. **Get Connection URI**:
-   * Click **Connect** on the Database cluster.
-   * Select **Drivers** (Node.js).
-   * Copy the connection string (which will look like `mongodb+srv://<username>:<password>@cluster.mongodb.net/daytree?retryWrites=true&w=majority`).
+   * Click **Connect** on your Database cluster in the Atlas Dashboard.
+   * Select **Drivers** (choose Node.js).
+   * Copy the connection string. It will look like:
+     `mongodb+srv://<username>:<password>@cluster.mongodb.net/?retryWrites=true&w=majority`
+6. **Configure URI Variables**:
+   * Replace `<username>` with your database user.
+   * Replace `<password>` with the secure user password.
+   * Specify the database name (e.g., `daytree`) after the slash `/` and before the query parameters (e.g., `mongodb+srv://user:pass@cluster.mongodb.net/daytree?retryWrites=true&w=majority`).
+   * Put this final URI in your backend `.env` as `MONGODB_URI`.
+7. **Safe Testing Configuration**:
+   * Running Jest integration tests locally will clear the database. To prevent your development or production Atlas database from being wiped, you should configure a separate `MONGODB_TEST_URI` in your backend `.env` pointing to a local test database:
+     `MONGODB_TEST_URI=mongodb://localhost:27017/daytree_test`
+   * This isolates tests completely from your main `MONGODB_URI`.
 
 ---
 
@@ -86,7 +98,7 @@ To ensure a smooth launch, follow this sequence:
    * Import your GitHub repository.
 3. **Configure Build Settings**:
    * **Framework Preset**: `Vite` (automatically detected)
-   * **Root Directory**: `./` (root of the workspace)
+   * **Root Directory**: `frontend` (the frontend subfolder of the workspace)
    * **Build Command**: `npm run build`
    * **Output Directory**: `dist`
 4. **Configure Environment Variables**:

@@ -15,7 +15,7 @@ describe('Tally Analytics API Integration Tests', () => {
 
   beforeAll(async () => {
     // Connect to test database
-    const testUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/daytree_test';
+    const testUri = process.env.MONGODB_TEST_URI || 'mongodb://localhost:27017/daytree_test';
     await mongoose.connect(testUri);
   });
 
