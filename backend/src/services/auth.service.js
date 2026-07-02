@@ -22,17 +22,6 @@ const generateOtp = () => {
  * @returns {Promise<Object>} Google user payload
  */
 const verifyGoogleToken = async (idToken) => {
-  // Support mock token for test/dev environment when credentials are not configured
-  if ((env.NODE_ENV === 'test' || env.NODE_ENV === 'development') && idToken && idToken.startsWith('mock-')) {
-    return {
-      email: 'googleuser@example.com',
-      email_verified: true,
-      name: 'Google User',
-      picture: 'https://example.com/picture.png',
-      sub: 'google-oauth2|1234567890',
-    };
-  }
-
   if (!env.GOOGLE_CLIENT_ID) {
     throw new Error('Google Client ID is not configured');
   }

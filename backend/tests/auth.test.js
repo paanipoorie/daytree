@@ -1,8 +1,36 @@
 process.env.NODE_ENV = 'test';
 process.env.RESEND_API_KEY = 'mock-key';
 process.env.EMAIL_FROM = 'DayTree <noreply@yourdomain.com>';
+process.env.GOOGLE_CLIENT_ID = 'test-google-client-id';
 
 global.lastSentOtp = null;
+
+// Mock Google Auth Library
+jest.mock('google-auth-library', () => {
+  const mockVerifyIdToken = jest.fn().mockImplementation(async ({ idToken }) => {
+    if (idToken === 'invalid-google-token') {
+      throw new Error('Invalid Google token');
+    }
+    return {
+      getPayload: () => ({
+        email: 'googleuser@example.com',
+        email_verified: true,
+        name: 'Google User',
+        picture: 'https://example.com/picture.png',
+        sub: 'google-oauth2|1234567890',
+      }),
+    };
+  });
+
+  return {
+    OAuth2Client: jest.fn().mockImplementation(() => {
+      return {
+        verifyIdToken: mockVerifyIdToken,
+      };
+    }),
+  };
+});
+
 
 // Mock Resend SDK
 jest.mock('resend', () => {
@@ -408,10 +436,10 @@ describe('Auth API Integration Tests', () => {
   });
 
   describe('Google OAuth Login', () => {
-    it('creates a new user on first login with Google mock token', async () => {
+    it('creates a new user on first login with a valid Google token', async () => {
       const res = await request(app)
         .post('/api/v1/auth/google')
-        .send({ token: 'mock-google-token' });
+        .send({ token: 'simulated-google-token' });
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -436,7 +464,7 @@ describe('Auth API Integration Tests', () => {
 
       const res = await request(app)
         .post('/api/v1/auth/google')
-        .send({ token: 'mock-google-token' });
+        .send({ token: 'simulated-google-token' });
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -446,6 +474,16 @@ describe('Auth API Integration Tests', () => {
       const user = await User.findOne({ email: 'googleuser@example.com' });
       expect(user.isVerified).toBe(true);
       expect(user.profilePicture.url).toBe('https://example.com/picture.png');
+    });
+
+    it('returns 401 when the Google ID token is invalid', async () => {
+      const res = await request(app)
+        .post('/api/v1/auth/google')
+        .send({ token: 'invalid-google-token' });
+
+      expect(res.status).toBe(401);
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toBe('Invalid Google token');
     });
   });
 
