@@ -36,6 +36,7 @@ describe('Tally Analytics API Integration Tests', () => {
       passwordHash: 'hashed_password_123',
       username: 'testuser',
       isOnboarded: true,
+      isVerified: true,
     });
 
     authToken = generateToken({ id: dbUser._id });

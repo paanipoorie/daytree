@@ -97,7 +97,14 @@ Navigate to the backend, set up environment secrets, and run in dev mode:
 cd backend
 npm install
 cp .env.example .env
+```
+Ensure you open the newly created `.env` file and configure the following variables:
+* `RESEND_API_KEY`: Obtain this by signing up on [Resend](https://resend.com) and generating an API key. (If not configured in development, a clear warning will be shown).
+* `EMAIL_FROM`: Set to a verified sender identity on Resend (defaults to `DayTree <noreply@yourdomain.com>`).
+* `GOOGLE_CLIENT_ID`: Your Google OAuth client ID (from Google Developer Console) for Google Sign-In verification.
 
+Now run the development server:
+```bash
 # Run development server
 npm run dev
 ```

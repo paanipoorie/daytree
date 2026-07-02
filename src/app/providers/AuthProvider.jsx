@@ -4,10 +4,13 @@ import {
   signupUser, 
   fetchCurrentUser, 
   logoutUser, 
-  setupUserProfile 
+  setupUserProfile,
+  googleLoginUser,
+  verifyOtpCode,
+  resendOtp
 } from "../../features/auth/services/authService";
 import { AuthContext } from "./authContext";
-import { getToken } from "../../shared/utils/apiClient";
+import { getToken, removeToken, abortAllActiveRequests } from "../../shared/utils/apiClient";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -29,6 +32,7 @@ export function AuthProvider({ children }) {
       } catch (err) {
         console.error("Session restoration failed:", err.message);
         // Clear invalid token
+        removeToken();
         setUser(null);
       } finally {
         setIsAuthLoading(false);
@@ -68,13 +72,57 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function loginWithGoogle(idToken) {
+    setIsAuthLoading(true);
+    setAuthError("");
+
+    try {
+      const loggedInUser = await googleLoginUser(idToken);
+      setUser(loggedInUser);
+    } catch (err) {
+      setAuthError(err.message || "Google authentication failed.");
+      throw err;
+    } finally {
+      setIsAuthLoading(false);
+    }
+  }
+
+  async function verifyOtp(email, otp) {
+    setIsAuthLoading(true);
+    setAuthError("");
+    try {
+      const verifiedUser = await verifyOtpCode(email, otp);
+      setUser(verifiedUser);
+    } catch (err) {
+      setAuthError(err.message || "Verification failed.");
+      throw err;
+    } finally {
+      setIsAuthLoading(false);
+    }
+  }
+
+  async function resendOtpCode(email) {
+    setAuthError("");
+    try {
+      await resendOtp(email);
+    } catch (err) {
+      setAuthError(err.message || "Failed to resend code.");
+      throw err;
+    }
+  }
+
   async function logout() {
+    // Cancel all pending API requests immediately on logout
+    abortAllActiveRequests();
+    
     setIsAuthLoading(true);
     try {
       await logoutUser();
       setUser(null);
     } catch (err) {
       console.error("Logout failed:", err.message);
+      // Ensure user is cleared even if api logout request fails/rejects
+      setUser(null);
     } finally {
       setIsAuthLoading(false);
     }
@@ -103,6 +151,9 @@ export function AuthProvider({ children }) {
     signup,
     logout,
     completeOnboarding,
+    loginWithGoogle,
+    verifyOtp,
+    resendOtpCode,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

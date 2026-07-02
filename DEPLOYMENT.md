@@ -71,6 +71,9 @@ To ensure a smooth launch, follow this sequence:
    * `CLOUDINARY_CLOUD_NAME`: *Cloudinary cloud name*
    * `CLOUDINARY_API_KEY`: *Cloudinary API key*
    * `CLOUDINARY_API_SECRET`: *Cloudinary API secret*
+   * `RESEND_API_KEY`: *Your Resend API key (e.g. re_xxxx)*
+   * `EMAIL_FROM`: *Your verified sender email address (e.g., `DayTree <noreply@yourdomain.com>`)*
+   * `GOOGLE_CLIENT_ID`: *Your Google OAuth Client ID for verification*
 5. **Deploy**: Click **Create Web Service**. Render will build and start the container. Copy the public URL (e.g., `https://daytree-backend.onrender.com`).
 
 ---
@@ -87,8 +90,9 @@ To ensure a smooth launch, follow this sequence:
    * **Build Command**: `npm run build`
    * **Output Directory**: `dist`
 4. **Configure Environment Variables**:
-   * Add the following environment variable:
+   * Add the following environment variables:
      * `VITE_API_BASE_URL`: *The Render backend URL (e.g., `https://daytree-backend.onrender.com`)*
+     * `VITE_GOOGLE_CLIENT_ID`: *Your Google OAuth Client ID for frontend button initialization (e.g. xxxx.apps.googleusercontent.com)*
 5. **Deploy**: Click **Deploy**. Vercel will build and assign a domain (e.g., `https://daytree.vercel.app`).
 
 ### 🔄 Step 4: Lock Down CORS (Optional but Recommended)

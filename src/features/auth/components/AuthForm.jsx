@@ -4,7 +4,7 @@ import AuthTreePanel from "./AuthTreePanel";
 import BrandMark from "../../../shared/components/BrandMark";
 import { useAuthForm } from "../hooks/useAuthForm";
 
-function AuthForm({ mode, error, isLoading, onSubmit, onModeChange }) {
+function AuthForm({ mode, error, isLoading, onSubmit, onGoogleSubmit, onModeChange }) {
   const isLogin = mode === "login";
   const {
     values,
@@ -70,7 +70,7 @@ function AuthForm({ mode, error, isLoading, onSubmit, onModeChange }) {
             {isLoading ? "Working..." : isLogin ? "Sign In" : "Create Account"}
           </button>
 
-          <AuthActions mode={mode} onModeChange={onModeChange} />
+          <AuthActions mode={mode} onModeChange={onModeChange} onGoogleLogin={onGoogleSubmit} />
         </form>
 
         <AuthTreePanel />

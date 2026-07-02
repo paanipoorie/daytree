@@ -94,6 +94,7 @@ exports.setupProfile = asyncHandler(async (req, res, next) => {
       username: updatedUser.username,
       profilePicture: updatedUser.profilePicture,
       isOnboarded: updatedUser.isOnboarded,
+      isVerified: updatedUser.isVerified,
       createdAt: updatedUser.createdAt,
     };
 

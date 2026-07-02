@@ -1,5 +1,8 @@
 const TOKEN_KEY = 'daytree_token';
 
+// Global registry of active AbortControllers to cancel in-flight requests on logout
+const activeControllers = new Set();
+
 export function getToken() {
   return localStorage.getItem(TOKEN_KEY);
 }
@@ -12,6 +15,20 @@ export function setToken(token) {
 
 export function removeToken() {
   localStorage.removeItem(TOKEN_KEY);
+}
+
+/**
+ * Abort all active API requests (to prevent late response delivery across users)
+ */
+export function abortAllActiveRequests() {
+  for (const controller of activeControllers) {
+    try {
+      controller.abort();
+    } catch (err) {
+      console.error('Failed to abort request:', err);
+    }
+  }
+  activeControllers.clear();
 }
 
 /**
@@ -40,23 +57,45 @@ export async function apiClient(url, options = {}) {
   
   const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
-  const response = await fetch(`${BASE_URL}${url}`, {
-    ...options,
-    headers,
-    body,
-  });
-  
-  let result;
+  // Setup AbortController if not provided in options
+  let controller;
+  let signal = options.signal;
+  if (!signal) {
+    controller = new AbortController();
+    signal = controller.signal;
+    // Don't abort logout requests to ensure server session is cleaned up
+    if (url !== '/api/v1/auth/logout' && !options.bypassAbortRegister) {
+      activeControllers.add(controller);
+    }
+  }
+
   try {
-    result = await response.json();
-  } catch {
-    result = { success: false, message: 'Invalid response from server' };
+    const response = await fetch(`${BASE_URL}${url}`, {
+      ...options,
+      headers,
+      body,
+      signal,
+    });
+    
+    let result;
+    try {
+      result = await response.json();
+    } catch {
+      result = { success: false, message: 'Invalid response from server' };
+    }
+    
+    if (!response.ok) {
+      let errMsg = result.message || 'API request failed';
+      if (result.errors && result.errors.length > 0) {
+        errMsg = result.errors.map(e => e.message).join(', ');
+      }
+      throw new Error(errMsg);
+    }
+    
+    return result;
+  } finally {
+    if (controller) {
+      activeControllers.delete(controller);
+    }
   }
-  
-  if (!response.ok) {
-    // If unauthorized, we could clear local token, but let caller handle it
-    throw new Error(result.message || 'API request failed');
-  }
-  
-  return result;
 }

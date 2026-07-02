@@ -7,15 +7,26 @@ import {
 } from "../../features/habits/services/habitService";
 import { getDateKey } from "../../shared/utils/dateUtils";
 import { HabitsContext } from "./habitsContext";
+import { useAuth } from "./authContext";
 
 export function HabitsProvider({ children }) {
+  const { isAuthenticated, user } = useAuth();
   const [habits, setHabits] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Initial load fetches habits from backend Express API
+  // Load habits when authenticated, otherwise clear them
   useEffect(() => {
+    if (!isAuthenticated || !user) {
+      setHabits([]);
+      setIsLoading(false);
+      setError("");
+      return;
+    }
+
     async function loadHabits() {
+      setIsLoading(true);
+      setError("");
       try {
         const savedHabits = await fetchHabits();
         setHabits(savedHabits);
@@ -28,7 +39,7 @@ export function HabitsProvider({ children }) {
     }
 
     loadHabits();
-  }, []);
+  }, [isAuthenticated, user]);
 
   async function addHabit(formData) {
     try {

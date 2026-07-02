@@ -44,7 +44,89 @@ exports.login = asyncHandler(async (req, res, next) => {
 
     return sendSuccess(res, 'Logged in successfully', result, 200);
   } catch (error) {
-    const status = error.message === 'Invalid email or password' ? 401 : 500;
+    let status = 500;
+    if (error.message === 'Invalid email or password' || error.message === 'This account uses Google Sign-In. Please login with Google.') {
+      status = 401;
+    } else if (error.message === 'Please verify your email first') {
+      status = 403;
+    }
+    return sendError(res, error.message, [], status);
+  }
+});
+
+/**
+ * Send OTP to user's email
+ */
+exports.sendOtp = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    const result = await authService.sendOtp(email);
+    return sendSuccess(res, 'Verification code sent successfully', result, 200);
+  } catch (error) {
+    const status = error.message === 'User not found' ? 404 : error.message === 'Email is already verified' ? 400 : 500;
+    return sendError(res, error.message, [], status);
+  }
+});
+
+/**
+ * Verify OTP code
+ */
+exports.verifyOtp = asyncHandler(async (req, res, next) => {
+  const { email, otp } = req.body;
+  try {
+    const result = await authService.verifyOtp({ email, otp });
+    
+    // Log audit event for successful verification
+    await logEvent({
+      userId: result.user.id,
+      action: 'USER_EMAIL_VERIFIED',
+      requestId: req.requestId,
+      metadata: { email }
+    });
+
+    return sendSuccess(res, 'Email verified successfully', result, 200);
+  } catch (error) {
+    const status = error.message === 'User not found' ? 404 : 
+      (error.message === 'Invalid verification code' || 
+       error.message === 'Verification code has expired' || 
+       error.message === 'Too many incorrect attempts. Please request a new verification code.') ? 400 : 500;
+    return sendError(res, error.message, [], status);
+  }
+});
+
+/**
+ * Resend OTP code
+ */
+exports.resendOtp = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    const result = await authService.resendOtp(email);
+    return sendSuccess(res, 'Verification code resent successfully', result, 200);
+  } catch (error) {
+    const status = error.message === 'User not found' ? 404 : error.message === 'Email is already verified' ? 400 : 500;
+    return sendError(res, error.message, [], status);
+  }
+});
+
+/**
+ * Handle Google OAuth Sign-in
+ */
+exports.googleLogin = asyncHandler(async (req, res, next) => {
+  const idToken = req.body.token || req.body.idToken;
+  try {
+    const result = await authService.googleLogin(idToken);
+    
+    // Log audit event
+    await logEvent({
+      userId: result.user.id,
+      action: 'USER_GOOGLE_LOGIN',
+      requestId: req.requestId,
+      metadata: { email: result.user.email }
+    });
+
+    return sendSuccess(res, 'Google login successful', result, 200);
+  } catch (error) {
+    const status = error.message === 'Invalid Google token' ? 401 : 500;
     return sendError(res, error.message, [], status);
   }
 });
@@ -61,6 +143,7 @@ exports.me = asyncHandler(async (req, res, next) => {
     username: user.username,
     profilePicture: user.profilePicture,
     isOnboarded: user.isOnboarded,
+    isVerified: user.isVerified,
     createdAt: user.createdAt,
   };
 

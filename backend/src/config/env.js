@@ -18,6 +18,9 @@ const env = {
   AUTH_RATE_LIMIT_WINDOW_MS: parseInt(process.env.AUTH_RATE_LIMIT_WINDOW_MS || '900000', 10), // 15 mins
   AUTH_RATE_LIMIT_MAX: parseInt(process.env.AUTH_RATE_LIMIT_MAX || '15', 10),
   CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  RESEND_API_KEY: process.env.RESEND_API_KEY || '',
+  EMAIL_FROM: process.env.EMAIL_FROM || 'DayTree <noreply@yourdomain.com>',
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
 };
 
 // Validate that critical env variables are present in production/production-like environments
@@ -25,8 +28,14 @@ if (env.NODE_ENV === 'production') {
   const missing = [];
   if (!process.env.MONGODB_URI) missing.push('MONGODB_URI');
   if (!process.env.JWT_SECRET) missing.push('JWT_SECRET');
+  if (!process.env.RESEND_API_KEY) missing.push('RESEND_API_KEY');
   if (missing.length > 0) {
     throw new Error(`Missing critical production environment variables: ${missing.join(', ')}`);
+  }
+} else {
+  // Warn if missing in dev (ignore during test runs to prevent cluttering test output)
+  if (!process.env.RESEND_API_KEY && env.NODE_ENV !== 'test') {
+    console.warn('\x1b[33m%s\x1b[0m', '⚠️  WARNING: RESEND_API_KEY is missing. OTP email delivery will fail.');
   }
 }
 

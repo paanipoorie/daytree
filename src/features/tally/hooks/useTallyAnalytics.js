@@ -1,16 +1,25 @@
 import { useState, useEffect } from "react";
 import { apiClient } from "../../../shared/utils/apiClient";
+import { useAuth } from "../../../app/providers/authContext";
 
 /**
  * Hook to fetch tally and heatmap analytics from backend API
  * @returns {Object} Heatmap data, streaks, daily average, loading state, and error message
  */
 export function useTallyAnalytics() {
+  const { isAuthenticated, user } = useAuth();
   const [analytics, setAnalytics] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (!isAuthenticated || !user) {
+      setAnalytics(null);
+      setIsLoading(false);
+      setError("");
+      return;
+    }
+
     async function loadAnalytics() {
       setIsLoading(true);
       setError("");
@@ -28,7 +37,7 @@ export function useTallyAnalytics() {
     }
 
     loadAnalytics();
-  }, []);
+  }, [isAuthenticated, user]);
 
   return {
     heatmapData: analytics?.heatmapData || [],

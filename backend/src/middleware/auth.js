@@ -23,6 +23,10 @@ const protect = async (req, res, next) => {
         return sendError(res, 'Not authorized, user not found', [], 401);
       }
 
+      if (!user.isVerified) {
+        return sendError(res, 'Please verify your email address first', [], 403);
+      }
+
       req.user = user;
       next();
     } catch (error) {

@@ -1,7 +1,10 @@
 // Returns a stable date key like "2026-05-10".
 // We use keys like this because arrays can compare strings easily.
 export function getDateKey(date = new Date()) {
-  return date.toISOString().split("T")[0];
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 // Converts current clock time into minutes after midnight.

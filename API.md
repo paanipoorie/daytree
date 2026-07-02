@@ -123,6 +123,135 @@ Every response includes a unique `requestId` in the header `X-Request-Id` and in
   }
   ```
 
+### 5. Send OTP Code
+* **Endpoint**: `POST /api/v1/auth/send-otp`
+* **Auth Required**: No
+* **Request Body**:
+  ```json
+  {
+    "email": "jane@example.com"
+  }
+  ```
+* **Success Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "message": "Verification code sent successfully",
+    "data": {
+      "success": true
+    }
+  }
+  ```
+* **Error Response (404 Not Found / 400 Bad Request)**:
+  ```json
+  {
+    "success": false,
+    "message": "User not found",
+    "errors": [],
+    "requestId": "fc3c1dfd-6cca-4698-93a3-9bed785f2e63"
+  }
+  ```
+
+### 6. Verify OTP Code
+* **Endpoint**: `POST /api/v1/auth/verify-otp`
+* **Auth Required**: No
+* **Request Body**:
+  ```json
+  {
+    "email": "jane@example.com",
+    "otp": "123456"
+  }
+  ```
+* **Success Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "message": "Email verified successfully",
+    "data": {
+      "user": {
+        "id": "6a45ee399253cd1d7298e546",
+        "email": "jane@example.com",
+        "username": "janesmith",
+        "profilePicture": null,
+        "isOnboarded": false,
+        "isVerified": true,
+        "createdAt": "2026-07-02T04:51:05.820Z"
+      },
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+  }
+  ```
+* **Error Response (400 Bad Request)**:
+  ```json
+  {
+    "success": false,
+    "message": "Invalid verification code",
+    "errors": [],
+    "requestId": "fc3c1dfd-6cca-4698-93a3-9bed785f2e63"
+  }
+  ```
+
+### 7. Resend OTP Code
+* **Endpoint**: `POST /api/v1/auth/resend-otp`
+* **Auth Required**: No
+* **Request Body**:
+  ```json
+  {
+    "email": "jane@example.com"
+  }
+  ```
+* **Success Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "message": "Verification code resent successfully",
+    "data": {
+      "success": true
+    }
+  }
+  ```
+
+### 8. Google OAuth Login / Sign-up
+* **Endpoint**: `POST /api/v1/auth/google`
+* **Auth Required**: No
+* **Request Body**:
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1Ni..."
+  }
+  ```
+* **Success Response (200 OK)**:
+  ```json
+  {
+    "success": true,
+    "message": "Google login successful",
+    "data": {
+      "user": {
+        "id": "6a45ee399253cd1d7298e546",
+        "email": "jane@example.com",
+        "username": "Jane Smith",
+        "profilePicture": {
+          "url": "https://lh3.googleusercontent.com/a/AGNmyxY...",
+          "publicId": ""
+        },
+        "isOnboarded": false,
+        "isVerified": true,
+        "createdAt": "2026-07-02T04:51:05.820Z"
+      },
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+  }
+  ```
+* **Error Response (401 Unauthorized)**:
+  ```json
+  {
+    "success": false,
+    "message": "Invalid Google token",
+    "errors": [],
+    "requestId": "fc3c1dfd-6cca-4698-93a3-9bed785f2e63"
+  }
+  ```
+
 ---
 
 ## 👤 Users (`/api/v1/users`)

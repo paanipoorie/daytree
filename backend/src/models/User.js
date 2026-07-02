@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
     },
     passwordHash: {
       type: String,
-      required: true,
+      required: false,
     },
     username: {
       type: String,
@@ -32,6 +32,30 @@ const userSchema = new mongoose.Schema(
     isOnboarded: {
       type: Boolean,
       default: false,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    otpHash: {
+      type: String,
+      default: null,
+    },
+    otpExpiry: {
+      type: Date,
+      default: null,
+    },
+    otpSentCount: {
+      type: Number,
+      default: 0,
+    },
+    otpLastSentAt: {
+      type: Date,
+      default: null,
+    },
+    otpAttemptsCount: {
+      type: Number,
+      default: 0,
     },
   },
   {

@@ -2,7 +2,7 @@ import { useAuth } from "../../../app/providers/authContext";
 import AuthForm from "../components/AuthForm";
 
 function SignupPage({ onModeChange }) {
-  const { signup, authError, isAuthLoading } = useAuth();
+  const { signup, loginWithGoogle, authError, isAuthLoading } = useAuth();
 
   return (
     <AuthForm
@@ -10,6 +10,7 @@ function SignupPage({ onModeChange }) {
       error={authError}
       isLoading={isAuthLoading}
       onSubmit={signup}
+      onGoogleSubmit={loginWithGoogle}
       onModeChange={onModeChange}
     />
   );

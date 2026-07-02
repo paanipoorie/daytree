@@ -28,12 +28,14 @@ describe('Habits API Integration Tests', () => {
       email: 'user1@example.com',
       passwordHash: 'hashed1',
       username: 'user1',
+      isVerified: true,
     });
 
     user2 = await User.create({
       email: 'user2@example.com',
       passwordHash: 'hashed2',
       username: 'user2',
+      isVerified: true,
     });
 
     token1 = generateToken({ id: user1._id });
