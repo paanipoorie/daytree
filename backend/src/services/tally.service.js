@@ -1,25 +1,8 @@
 const Habit = require('../models/Habit');
 const HabitCompletion = require('../models/HabitCompletion');
 
-// Date Utility Helpers (aligned with frontend implementation)
-const getDateKey = (date = new Date()) => {
-  const d = date instanceof Date ? date : new Date(date);
-  return d.toISOString().split('T')[0];
-};
+const { getDateKey, addDays, getRecentDateKeys } = require('../utils/dateUtils');
 
-const addDays = (date, amount) => {
-  const nextDate = new Date(date);
-  nextDate.setDate(nextDate.getDate() + amount);
-  return nextDate;
-};
-
-const getRecentDateKeys = (dayCount = 91) => {
-  const today = new Date();
-  return Array.from({ length: dayCount }, (_, index) => {
-    const offset = index - (dayCount - 1);
-    return getDateKey(addDays(today, offset));
-  });
-};
 
 const TIME_PERIODS_END_MINUTES = {
   morning: 12 * 60,          // 12:00 PM

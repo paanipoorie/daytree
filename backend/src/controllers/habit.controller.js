@@ -2,6 +2,8 @@ const habitService = require('../services/habit.service');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const { logEvent } = require('../services/audit.service');
+const { getDateKey } = require('../utils/dateUtils');
+
 
 /**
  * Get all habits for the authenticated user
@@ -98,7 +100,7 @@ exports.toggleHabitCompletion = asyncHandler(async (req, res, next) => {
   const habitId = req.params.id;
   
   // Default to today's date key if not provided
-  const date = req.body.date || new Date().toISOString().split('T')[0];
+  const date = req.body.date || getDateKey();
 
   try {
     const result = await habitService.toggleHabitCompletion(userId, habitId, date);

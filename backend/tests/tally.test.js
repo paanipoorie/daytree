@@ -5,6 +5,8 @@ const User = require('../src/models/User');
 const Habit = require('../src/models/Habit');
 const HabitCompletion = require('../src/models/HabitCompletion');
 const { generateToken } = require('../src/utils/jwt');
+const { getDateKey, addDays } = require('../src/utils/dateUtils');
+
 
 // Ensure NODE_ENV is set to test
 process.env.NODE_ENV = 'test';
@@ -116,7 +118,7 @@ describe('Tally Analytics API Integration Tests', () => {
     expect(data.dailyAverage).toBe(0); // 0% average
 
     // Heatmap should show totalHabits: 2 for recent days
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = getDateKey();
     const todayData = data.heatmapData.find(d => d.dateKey === todayStr);
     expect(todayData).toBeDefined();
     expect(todayData.totalHabits).toBe(2);
@@ -126,7 +128,7 @@ describe('Tally Analytics API Integration Tests', () => {
   });
 
   it('calculates partial and full completion rates correctly', async () => {
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = getDateKey();
     const fiveDaysAgo = new Date();
     fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
 
@@ -180,11 +182,7 @@ describe('Tally Analytics API Integration Tests', () => {
 
     // Create completion dates
     // Streaks require 100% completion (since there is only 1 habit, completing it gives 100%).
-    const getPastDateStr = (daysAgo) => {
-      const d = new Date();
-      d.setDate(d.getDate() - daysAgo);
-      return d.toISOString().split('T')[0];
-    };
+    const getPastDateStr = (daysAgo) => getDateKey(addDays(new Date(), -daysAgo));
 
     // Scenario: Completed on days: T-4, T-3, T-2, T-1, T-0 (current streak = 5)
     for (let i = 0; i < 5; i++) {
@@ -249,7 +247,7 @@ describe('Tally Analytics API Integration Tests', () => {
   });
 
   it('correctly handles archived habits', async () => {
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = getDateKey();
     const fiveDaysAgo = new Date();
     fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
 
@@ -301,11 +299,7 @@ describe('Tally Analytics API Integration Tests', () => {
     expect(todayData.completionRate).toBe(100);
 
     // If we look at yesterday (where archived habit was NOT completed)
-    const yesterdayStr = (() => {
-      const d = new Date();
-      d.setDate(d.getDate() - 1);
-      return d.toISOString().split('T')[0];
-    })();
+    const yesterdayStr = getDateKey(addDays(new Date(), -1));
     const yesterdayData = res.body.data.heatmapData.find(d => d.dateKey === yesterdayStr);
     // Archived habit was not completed, so it is ignored. Only active habit is active.
     expect(yesterdayData.totalHabits).toBe(1);
