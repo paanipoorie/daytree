@@ -10,11 +10,13 @@ function ProfileSetupPage() {
   const [username, setUsername] = useState(user?.username || "");
   const [avatar, setAvatar] = useState("");
   const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarFile, setAvatarFile] = useState(null);
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setAvatar(file.name);
+      setAvatarFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarPreview(reader.result);
@@ -23,14 +25,14 @@ function ProfileSetupPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    completeOnboarding({
-      username,
-      displayName: username,
-      avatar: avatarPreview || "",
-    });
-    navigate("/home");
+    try {
+      await completeOnboarding(username, avatarFile);
+      navigate("/home");
+    } catch (err) {
+      console.error("Onboarding failed:", err.message);
+    }
   };
 
   return (

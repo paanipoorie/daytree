@@ -160,49 +160,88 @@ npm run preview
 
 ## Environment Variables
 
-No environment variables are required for the current frontend-only version.
+The backend relies on environment variables configured in `backend/.env`. A template is provided in `backend/.env.example`.
 
-When the backend is added, environment files should not be committed. Use `.env.example` to document required variables.
+Key environment variables:
+* `PORT`: Port to run the server on (default: `5000`).
+* `MONGODB_URI`: MongoDB connection string (e.g. `mongodb://localhost:27017/daytree`).
+* `JWT_SECRET`: Secret key used for signing JWTs.
+* `JWT_EXPIRES_IN`: JWT expiration length (default: `7d`).
+* `CORS_ORIGIN`: Approved CORS origin for production (default: `http://localhost:5173`).
+* `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`: Credentials for profile picture uploads.
 
-## Backend Readiness
+## Backend Setup & Operations
 
-Persistence and authentication already use service layers:
+### 1. Prerequisites
+Ensure you have `Node.js` (v18+) and `Docker` installed on your machine.
 
-- `features/habits/services/habitService.js`
-- `features/auth/services/authService.js`
+### 2. Start the Local Database
+Run the MongoDB database inside Docker:
+```bash
+# Start a new container
+docker run -d --name daytree-mongo -p 27017:27017 mongo:7.0
 
-Today these services are local placeholders. Later they can be replaced with API calls without rewriting page components.
-
-Planned API direction:
-
-```text
-React -> service functions -> Express REST API -> MongoDB
+# Or start the container if it already exists
+docker start daytree-mongo
 ```
 
-## Roadmap
+### 3. Install Dependencies & Configure
+```bash
+cd backend
+npm install
+cp .env.example .env
+```
+Fill in the variables in `.env` (particularly `JWT_SECRET`).
 
-- Replace local habit persistence with Express API calls.
-- Add MongoDB habit and user schemas.
-- Add real signup/login with password hashing.
-- Add JWT authentication and protected routes.
-- Add profile data from authenticated user.
-- Improve historical analytics when habits are deleted or archived.
-- Deploy frontend to Vercel.
-- Deploy backend to Render.
-- Use MongoDB Atlas for production database.
+### 4. Running the Server
+```bash
+# Development mode (with nodemon)
+npm run dev
+
+# Production mode
+npm start
+```
+
+### 5. Running Tests
+Run the comprehensive integration test suite (covering Auth, Habits, Completions, and Tally Analytics):
+```bash
+npm test
+```
+
+## API Endpoint Overview
+
+All endpoints are versioned under `/api/v1` and return structured JSON responses.
+
+### Centralized Response Formats
+* **Success**: `{ success: true, message: "...", data: {} }`
+* **Error**: `{ success: false, message: "...", errors: [...], requestId: "..." }`
+
+### Endpoints
+* **Authentication (`/api/v1/auth`)**:
+  * `POST /signup` - Register a new account.
+  * `POST /login` - Login and receive a JWT.
+  * `GET /me` - Get current user profile details (protected).
+  * `POST /logout` - Log out current session (protected).
+* **Users (`/api/v1/users`)**:
+  * `POST /setup-profile` - Upload profile picture and update username (protected, supports `multipart/form-data` uploads).
+* **Habits (`/api/v1/habits`)**:
+  * `GET /` - Retrieve active habits (protected).
+  * `POST /` - Create a new habit (protected).
+  * `PATCH /:id` - Edit habit metadata or archive status (protected).
+  * `DELETE /:id` - Soft-delete / archive a habit (protected).
+  * `POST /:id/toggle` - Toggle habit completion state for a date key `YYYY-MM-DD` (protected).
+* **Tally Analytics (`/api/v1/tally`)**:
+  * `GET /` - Fetch unified dashboard analytics including heatmap grid, streaks, daily average, and active summaries (protected).
 
 ## Git Hygiene
 
 Do not commit:
-
 - `node_modules/`
 - `dist/`
 - `.env`
 - local editor/cache files
-- `.codex`
 
 Commit:
-
 - source files
 - static assets in `public/`
 - configuration files

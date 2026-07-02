@@ -36,3 +36,6 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# AI agent files
+AGENT.md
