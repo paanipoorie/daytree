@@ -2,7 +2,12 @@ const dotenv = require('dotenv');
 const path = require('path');
 
 // Load environment variables from .env file
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+const dotenvResult = dotenv.config({ path: path.join(__dirname, '../../.env') });
+
+// Temporary logging of loaded environment variables (keys only, no values)
+console.log('[ENV DEBUG] Environment variables parsed from .env by dotenv:', dotenvResult.parsed ? Object.keys(dotenvResult.parsed) : 'None (.env file missing/empty)');
+console.log('[ENV DEBUG] All process.env keys present at startup (sorted):', Object.keys(process.env).sort());
+
 
 const env = {
   PORT: parseInt(process.env.PORT || '5000', 10),
