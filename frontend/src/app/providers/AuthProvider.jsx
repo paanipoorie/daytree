@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { 
   loginUser, 
   signupUser, 
@@ -10,12 +10,14 @@ import {
   resendOtp
 } from "../../features/auth/services/authService";
 import { AuthContext } from "./authContext";
+import { useToast } from "./useToast";
 import { getToken, removeToken, abortAllActiveRequests } from "../../shared/utils/apiClient";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isAuthLoading, setIsAuthLoading] = useState(true); // Start as true to check token first
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [authError, setAuthError] = useState("");
+  const { success: showSuccess, error: showError } = useToast();
 
   // Restore session on mount/refresh
   useEffect(() => {
@@ -31,7 +33,6 @@ export function AuthProvider({ children }) {
         setUser(currentUser);
       } catch (err) {
         console.error("Session restoration failed:", err.message);
-        // Clear invalid token
         removeToken();
         setUser(null);
       } finally {
@@ -49,8 +50,10 @@ export function AuthProvider({ children }) {
     try {
       const loggedInUser = await loginUser(credentials);
       setUser(loggedInUser);
+      showSuccess("Welcome back! You're signed in.");
     } catch (err) {
       setAuthError(err.message || "Could not sign in.");
+      showError(err.message || "Could not sign in.");
       throw err;
     } finally {
       setIsAuthLoading(false);
@@ -64,8 +67,10 @@ export function AuthProvider({ children }) {
     try {
       const createdUser = await signupUser(credentials);
       setUser(createdUser);
+      showSuccess("Account created! Please verify your email to continue.");
     } catch (err) {
       setAuthError(err.message || "Could not create account.");
+      showError(err.message || "Could not create account.");
       throw err;
     } finally {
       setIsAuthLoading(false);
@@ -79,8 +84,10 @@ export function AuthProvider({ children }) {
     try {
       const loggedInUser = await googleLoginUser(idToken);
       setUser(loggedInUser);
+      showSuccess("Welcome back! Signed in with Google.");
     } catch (err) {
       setAuthError(err.message || "Google authentication failed.");
+      showError(err.message || "Google authentication failed.");
       throw err;
     } finally {
       setIsAuthLoading(false);
@@ -93,8 +100,10 @@ export function AuthProvider({ children }) {
     try {
       const verifiedUser = await verifyOtpCode(email, otp);
       setUser(verifiedUser);
+      showSuccess("Email verified! Let's set up your profile.");
     } catch (err) {
       setAuthError(err.message || "Verification failed.");
+      showError(err.message || "Verification failed.");
       throw err;
     } finally {
       setIsAuthLoading(false);
@@ -105,23 +114,24 @@ export function AuthProvider({ children }) {
     setAuthError("");
     try {
       await resendOtp(email);
+      showSuccess("A new verification code has been sent.");
     } catch (err) {
       setAuthError(err.message || "Failed to resend code.");
+      showError(err.message || "Failed to resend code.");
       throw err;
     }
   }
 
   async function logout() {
-    // Cancel all pending API requests immediately on logout
     abortAllActiveRequests();
     
     setIsAuthLoading(true);
     try {
       await logoutUser();
       setUser(null);
+      showSuccess("You've been logged out.");
     } catch (err) {
       console.error("Logout failed:", err.message);
-      // Ensure user is cleared even if api logout request fails/rejects
       setUser(null);
     } finally {
       setIsAuthLoading(false);
@@ -134,8 +144,10 @@ export function AuthProvider({ children }) {
     try {
       const updatedUser = await setupUserProfile(username, file);
       setUser(updatedUser);
+      showSuccess("Welcome to DayTree! 👋 Let's create your first habit.");
     } catch (err) {
       setAuthError(err.message || "Could not save profile.");
+      showError(err.message || "Could not save profile.");
       throw err;
     } finally {
       setIsAuthLoading(false);

@@ -92,6 +92,16 @@ function VerifyEmailPage() {
             We've sent a 6-digit verification code to <strong>{email}</strong>
           </p>
 
+          <p style={{ 
+            marginBottom: "20px", 
+            fontSize: "13px", 
+            color: "var(--color-text-secondary, #9ca3af)",
+            lineHeight: "1.5"
+          }}>
+            Didn't receive it? Check your spam or promotions folder. 
+            The code expires in 10 minutes.
+          </p>
+
           <div style={{ marginBottom: "20px" }}>
             <label 
               htmlFor="otp-input"
@@ -124,12 +134,14 @@ function VerifyEmailPage() {
                 fontSize: "20px",
                 letterSpacing: "4px",
                 textAlign: "center",
-                borderRadius: "6px",
-                border: "1px solid var(--color-border, #374151)",
-                backgroundColor: "var(--color-bg-input, #1f2937)",
-                color: "var(--color-text, #f9fafb)",
+                borderRadius: "0",
+                border: "2px solid #000",
+                backgroundColor: "#fff",
+                color: "#000",
                 outline: "none"
               }}
+              autoComplete="one-time-code"
+              inputMode="numeric"
             />
           </div>
 
@@ -149,48 +161,24 @@ function VerifyEmailPage() {
             className="auth-submit" 
             type="submit" 
             disabled={isBusy || !email || otp.length !== 6}
-            style={{ width: "100%", marginBottom: "16px" }}
           >
             {isVerifying || isAuthLoading ? "Verifying..." : "Verify Code"}
           </button>
 
-          <div 
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-              marginTop: "12px"
-            }}
-          >
+          <div className="auth-text-buttons">
             <button
               type="button"
+              className="auth-text-button"
               disabled={isBusy || countdown > 0}
               onClick={handleResend}
-              style={{
-                border: "none",
-                background: "none",
-                color: (isBusy || countdown > 0) ? "var(--color-text-secondary, #9ca3af)" : "var(--color-primary, #6366f1)",
-                cursor: (isBusy || countdown > 0) ? "not-allowed" : "pointer",
-                fontSize: "14px",
-                fontWeight: "500",
-                padding: 0
-              }}
             >
               {isResending ? "Sending..." : countdown > 0 ? `Resend Code (${countdown}s)` : "Resend Code"}
             </button>
             <button
               type="button"
+              className="auth-text-button secondary"
               disabled={isBusy}
               onClick={handleBackToLogin}
-              style={{
-                border: "none",
-                background: "none",
-                color: isBusy ? "var(--color-text-secondary, #9ca3af)" : "var(--color-text-secondary, #9ca3af)",
-                cursor: isBusy ? "not-allowed" : "pointer",
-                fontSize: "14px",
-                fontWeight: "500",
-                padding: 0
-              }}
             >
               Back to Login
             </button>

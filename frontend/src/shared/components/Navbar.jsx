@@ -5,15 +5,19 @@ import BrandMark from "./BrandMark";
 function Navbar({ onLogout }) {
   const { user } = useAuth();
 
+  const handleLogout = () => {
+    onLogout();
+  };
+
   return (
     <header className="navbar">
       <h1>
-        <Link to="/home" style={{ textDecoration: "none", color: "inherit" }}>
+        <Link to="/home" className="brand-link">
           <BrandMark size="medium" />
         </Link>
       </h1>
 
-      <nav style={{ display: "flex", alignItems: "center" }}>
+      <nav>
         <NavLink
           to="/home"
           className={({ isActive }) => `nav-link ${isActive ? "active-nav" : ""}`}
@@ -24,61 +28,27 @@ function Navbar({ onLogout }) {
         <NavLink
           to="/tally"
           className={({ isActive }) => `nav-link ${isActive ? "active-nav" : ""}`}
-          style={{ marginRight: "12px" }}
         >
           Tally
         </NavLink>
 
         {user && (
-          <div 
-            className="navbar-user-profile" 
-            style={{ 
-              display: "flex", 
-              alignItems: "center", 
-              gap: "8px", 
-              marginRight: "16px",
-              fontFamily: "monospace",
-              fontSize: "14px",
-              fontWeight: "bold",
-              borderRight: "2px solid #000",
-              paddingRight: "16px"
-            }}
-          >
+          <div className="navbar-user-profile">
             {user.profilePicture?.url ? (
-              <img 
-                src={user.profilePicture.url} 
-                alt="Profile" 
-                style={{ 
-                  width: "28px", 
-                  height: "28px", 
-                  borderRadius: "50%", 
-                  border: "2px solid #000", 
-                  objectFit: "cover" 
-                }} 
+              <img
+                src={user.profilePicture.url}
+                alt="Profile"
               />
             ) : (
-              <div 
-                style={{ 
-                  width: "28px", 
-                  height: "28px", 
-                  borderRadius: "50%", 
-                  border: "2px solid #000", 
-                  display: "flex", 
-                  alignItems: "center", 
-                  justifyContent: "center", 
-                  backgroundColor: "#000", 
-                  color: "#fff",
-                  fontSize: "12px"
-                }}
-              >
+              <div className="avatar-placeholder">
                 {(user.username || user.email || "?").charAt(0).toUpperCase()}
               </div>
             )}
-            <span>{user.username || user.email?.split('@')[0]}</span>
+            <span>{user.username || user.email?.split("@")[0]}</span>
           </div>
         )}
 
-        <button className="logout-button" type="button" onClick={onLogout}>
+        <button className="logout-button" type="button" onClick={handleLogout}>
           Logout
         </button>
       </nav>

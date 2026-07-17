@@ -6,6 +6,7 @@ const Habit = require('../src/models/Habit');
 const HabitCompletion = require('../src/models/HabitCompletion');
 const { generateToken } = require('../src/utils/jwt');
 
+require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 process.env.NODE_ENV = 'test';
 
 describe('Habit Completions API Integration Tests', () => {

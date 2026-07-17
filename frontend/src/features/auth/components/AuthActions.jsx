@@ -3,12 +3,11 @@ import { useEffect, useRef, useState } from "react";
 function AuthActions({ mode, onModeChange, onGoogleLogin }) {
   const isLogin = mode === "login";
   const googleBtnRef = useRef(null);
-  const [gisStatus, setGisStatus] = useState("loading"); // "loading", "loaded", "error"
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+  const [gisStatus, setGisStatus] = useState(() => (googleClientId ? "loading" : "error")); // "loading", "loaded", "error"
 
   useEffect(() => {
     if (!googleClientId) {
-      setGisStatus("error");
       return;
     }
 
@@ -52,7 +51,7 @@ function AuthActions({ mode, onModeChange, onGoogleLogin }) {
         });
       } catch (error) {
         console.error("Failed to initialize Google Sign-In:", error);
-        setGisStatus("error");
+        setTimeout(() => setGisStatus("error"), 0);
       }
     }
   }, [gisStatus, googleClientId, onGoogleLogin]);
@@ -67,7 +66,7 @@ function AuthActions({ mode, onModeChange, onGoogleLogin }) {
 
       <div className="auth-socials" style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "16px" }}>
         {gisStatus === "loading" && (
-          <div style={{ fontSize: "14px", color: "#666", textAlign: "center" }}>Loading Google Sign-In...</div>
+          <div style={{ fontSize: "14px", color: "#666", textAlign: "center" }}>Loading Google Sign-In…</div>
         )}
         
         {gisStatus === "loaded" && (
@@ -79,16 +78,24 @@ function AuthActions({ mode, onModeChange, onGoogleLogin }) {
             className="google-auth-error" 
             style={{ 
               color: "#d93025", 
-              fontSize: "14px", 
+              fontSize: "13px", 
               textAlign: "center", 
               width: "100%", 
-              lineHeight: "1.4",
-              padding: "8px",
+              lineHeight: "1.5",
+              padding: "12px",
               border: "1px solid #d93025",
-              backgroundColor: "#fff"
+              backgroundColor: "#fef2f2",
+              borderRadius: "6px"
             }}
           >
-            Google Sign-In is currently unavailable. Please use Email Login or try again later.
+            <div style={{ fontWeight: "600", marginBottom: "4px" }}>Google Sign-In unavailable</div>
+            <div style={{ color: "#666", fontSize: "12px", marginBottom: "8px" }}>
+              This feature requires Google's authentication service. 
+              It may be blocked by privacy settings or network restrictions.
+            </div>
+            <p style={{ margin: "0", fontSize: "12px", color: "#666" }}>
+              Please use email & password to continue.
+            </p>
           </div>
         )}
       </div>

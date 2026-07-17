@@ -8,7 +8,9 @@ function BacklogList({ habits }) {
     <section className="backlog-panel">
       <h2>Backlogs</h2>
 
-      {habits.length === 0 && <p className="empty-message">No backlogs.</p>}
+      {habits.length === 0 && (
+        <p className="empty-message">No pending habits.</p>
+      )}
 
       {habits.map((habit) => {
         const period = getTimePeriod(habit.time);

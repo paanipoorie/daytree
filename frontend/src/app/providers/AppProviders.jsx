@@ -1,10 +1,13 @@
 import { AuthProvider } from "./AuthProvider";
 import { HabitsProvider } from "./HabitsProvider";
+import { ToastProvider } from "./ToastProvider";
 
 export function AppProviders({ children }) {
   return (
-    <AuthProvider>
-      <HabitsProvider>{children}</HabitsProvider>
-    </AuthProvider>
+    <ToastProvider>
+      <AuthProvider>
+        <HabitsProvider>{children}</HabitsProvider>
+      </AuthProvider>
+    </ToastProvider>
   );
 }

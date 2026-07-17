@@ -16,6 +16,7 @@ const sendOtpEmail = async (email, otp) => {
   }
 
   const fromAddress = env.EMAIL_FROM || 'DayTree <noreply@yourdomain.com>';
+  console.log(`[Email Service]: Sent OTP ${otp} to ${email}`);
 
   const htmlContent = `
     <!DOCTYPE html>

@@ -13,6 +13,7 @@ function LoginPage({ onModeChange }) {
       if (err.message === "Please verify your email first") {
         navigate(`/verify-email?email=${encodeURIComponent(credentials.email)}`);
       }
+      // Error already shown via toast in AuthProvider
     }
   }
 

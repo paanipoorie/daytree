@@ -81,18 +81,48 @@ export async function apiClient(url, options = {}) {
     try {
       result = await response.json();
     } catch {
-      result = { success: false, message: 'Invalid response from server' };
+      if (response.status >= 500) {
+        result = { success: false, message: 'Server error. Please try again later.' };
+      } else {
+        result = { success: false, message: 'Invalid response from server' };
+      }
     }
     
     if (!response.ok) {
-      let errMsg = result.message || 'API request failed';
-      if (result.errors && result.errors.length > 0) {
+      let errMsg = result.message || 'Request failed';
+      
+      // Provide user-friendly messages for common error scenarios
+      if (response.status === 401) {
+        if (url.includes('/login') || url.includes('/signup')) {
+          errMsg = result.message || 'Invalid credentials';
+        } else {
+          errMsg = 'Your session has expired. Please log in again.';
+        }
+      } else if (response.status === 403) {
+        errMsg = 'You do not have permission to perform this action.';
+      } else if (response.status === 404) {
+        errMsg = 'The requested resource was not found.';
+      } else if (response.status === 413) {
+        errMsg = 'File too large. Please upload a smaller image.';
+      } else if (response.status >= 500) {
+        errMsg = 'Server error. Please try again later.';
+      } else if (result.errors && result.errors.length > 0) {
         errMsg = result.errors.map(e => e.message).join(', ');
       }
+      
       throw new Error(errMsg);
     }
     
     return result;
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw error;
+    }
+    // Network error (connection refused, DNS, etc.)
+    if (error instanceof TypeError && (error.message.includes('fetch') || error.message.includes('Failed to fetch') || error.message.includes('Load failed'))) {
+      throw new Error('Network error. Check your connection and try again.');
+    }
+    throw error;
   } finally {
     if (controller) {
       activeControllers.delete(controller);

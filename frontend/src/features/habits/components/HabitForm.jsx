@@ -27,7 +27,8 @@ function HabitForm({ onAddHabit }) {
       setName("");
       setTime("morning");
     } catch (err) {
-      setError(err.message || "Failed to create habit.");
+      const message = err.message || "Failed to create habit.";
+      setError(message);
     } finally {
       setIsPending(false);
     }

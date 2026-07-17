@@ -8,6 +8,7 @@ const { generateToken } = require('../src/utils/jwt');
 const { getDateKey, addDays } = require('../src/utils/dateUtils');
 
 
+require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 // Ensure NODE_ENV is set to test
 process.env.NODE_ENV = 'test';
 

@@ -42,10 +42,20 @@ function ProfileSetupPage() {
       <section className="auth-frame">
         <form className="auth-card" onSubmit={handleSubmit}>
           <BrandMark size="medium" />
-          <p className="auth-tagline">Set up your profile to continue.</p>
+          <p className="auth-tagline">Grow daily. Stay consistent.</p>
 
           <h1>Welcome to DayTree</h1>
           <p className="onboarding-subtitle">Tell us a bit about yourself</p>
+
+          <p style={{ 
+            marginBottom: "24px", 
+            fontSize: "13px", 
+            color: "var(--color-text-secondary, #6b7280)",
+            lineHeight: "1.5"
+          }}>
+            You're almost ready. Set up your profile to start tracking daily habits 
+            and building consistency. You can always change this later.
+          </p>
 
           {/* Profile Picture Section */}
           <div className="auth-field profile-picture-setup">

@@ -27,31 +27,40 @@ function HabitItem({ habit, onToggleHabit, onDeleteHabit }) {
     }
   }
 
+  const isBusy = isToggling || isDeleting;
+
   return (
     <div className={`habit-item ${isDeleting ? "deleting" : ""}`}>
       <input
         type="checkbox"
         checked={completedToday}
-        disabled={isToggling || isDeleting}
+        disabled={isBusy}
         onChange={handleToggle}
         aria-label={`Toggle completion for ${habit.name}`}
+        aria-busy={isToggling}
       />
 
-      <span style={{ textDecoration: completedToday ? "line-through" : "none", opacity: isDeleting ? 0.5 : 1 }}>
+      <span style={{ 
+        textDecoration: completedToday ? "line-through" : "none", 
+        opacity: isDeleting ? 0.5 : 1,
+        transition: "opacity 0.15s ease"
+      }}>
         {habit.name}
       </span>
 
       <button
         className="delete-button"
         type="button"
-        disabled={isToggling || isDeleting}
+        disabled={isBusy}
         onClick={handleDelete}
         aria-label={`Delete ${habit.name}`}
         title={`Delete ${habit.name}`}
+        aria-busy={isDeleting}
       >
         <span className="trash-icon" aria-hidden="true">
           <span />
         </span>
+        {isDeleting && <span style={{ marginLeft: "8px", fontSize: "10px", fontFamily: "monospace" }}>Deleting…</span>}
       </button>
     </div>
   );

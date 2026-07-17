@@ -17,6 +17,8 @@ const connectDB = async () => {
     console.log(`MongoDB connection.readyState: ${conn.connection.readyState}`);
   } catch (error) {
     console.error(`MongoDB Connection Error: ${error.message}`);
+    console.error('💡 TIP 1: If connecting to MongoDB Atlas is failing/timing out, check your internet connection or ensure your IP is whitelisted on Atlas.');
+    console.error('💡 TIP 2: Alternatively, you can run a local MongoDB service. If you have Docker installed, you can start the configured local MongoDB container by running: \n\n   docker start daytree-mongo\n');
     process.exit(1);
   }
 };

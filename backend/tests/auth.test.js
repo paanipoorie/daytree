@@ -1,3 +1,4 @@
+require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 process.env.NODE_ENV = 'test';
 process.env.RESEND_API_KEY = 'mock-key';
 process.env.EMAIL_FROM = 'DayTree <noreply@yourdomain.com>';

@@ -5,6 +5,10 @@
     "frontend": "cd frontend && npm run dev",
     "backend": "cd backend && npm run dev",
     "frontend:build": "cd frontend && npm run build",
-    "backend:test": "cd backend && npm test"
+    "backend:test": "cd backend && npm test",
+    "dev": "docker start daytree-mongo 2>/dev/null || true && concurrently --kill-others-on-fail \"npm run backend\" \"npm run frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
   }
 }
