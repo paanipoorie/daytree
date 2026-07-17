@@ -1,10 +1,11 @@
-// Database connection configuration and initialization (triggered nodemon restart)
 const mongoose = require('mongoose');
 const env = require('./env');
 
 const connectDB = async () => {
   try {
     const rawUri = env.MONGODB_URI;
+    console.log('[DB DEBUG] env.MONGODB_URI:', rawUri ? rawUri.substring(0, 30) + '...' : 'UNDEFINED');
+    console.log('[DB DEBUG] env.NODE_ENV:', env.NODE_ENV);
     const sanitizedUri = rawUri ? rawUri.replace(/:([^@]+)@/, ':****@') : 'undefined';
     console.log(`MongoDB connection URI: ${sanitizedUri}`);
 

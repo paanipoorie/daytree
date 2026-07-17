@@ -29,6 +29,7 @@ if (NODE_ENV === 'development') {
 console.log('[ENV DEBUG] NODE_ENV:', NODE_ENV);
 console.log('[ENV DEBUG] MONGODB_URI present:', !!process.env.MONGODB_URI);
 console.log('[ENV DEBUG] JWT_SECRET present:', !!process.env.JWT_SECRET);
+console.log('[ENV DEBUG] process.env.MONGODB_URI:', process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 30) + '...' : 'UNDEFINED');
 
 const env = {
   NODE_ENV,
@@ -48,6 +49,8 @@ const env = {
   EMAIL_FROM: process.env.EMAIL_FROM || '',
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
 };
+
+console.log('[ENV DEBUG] env.MONGODB_URI after creation:', env.MONGODB_URI ? env.MONGODB_URI.substring(0, 30) + '...' : 'UNDEFINED');
 
 if (NODE_ENV === 'production') {
   const missing = [];
