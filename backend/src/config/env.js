@@ -1,11 +1,35 @@
 const dotenv = require('dotenv');
 const path = require('path');
 
-// Load environment variables from .env file
-const dotenvResult = dotenv.config({ path: path.join(__dirname, '../../.env') });
+// Helper function to clean process.env keys and values (trim leading/trailing spaces/carriage returns)
+const cleanEnvKeys = () => {
+  Object.keys(process.env).forEach((key) => {
+    const trimmedKey = key.trim();
+    const value = process.env[key];
+    if (typeof value === 'string') {
+      const trimmedValue = value.trim();
+      if (trimmedKey !== key || trimmedValue !== value) {
+        if (trimmedKey !== key) {
+          delete process.env[key];
+        }
+        process.env[trimmedKey] = trimmedValue;
+      }
+    }
+  });
+};
 
-// Temporary logging of loaded environment variables (keys only, no values)
-console.log('[ENV DEBUG] Environment variables parsed from .env by dotenv:', dotenvResult.parsed ? Object.keys(dotenvResult.parsed) : 'None (.env file missing/empty)');
+// First pass: clean OS environment variables
+cleanEnvKeys();
+
+// Load environment variables from .env file ONLY in non-production environments
+let dotenvResult = { parsed: {} };
+if (process.env.NODE_ENV !== 'production') {
+  dotenvResult = dotenv.config({ path: path.join(__dirname, '../../.env') });
+  // Second pass: clean any variables loaded from .env
+  cleanEnvKeys();
+}
+
+console.log('[ENV DEBUG] Environment variables parsed from .env by dotenv:', dotenvResult.parsed ? Object.keys(dotenvResult.parsed) : 'None (.env file missing/empty/skipped)');
 console.log('[ENV DEBUG] All process.env keys present at startup (sorted):', Object.keys(process.env).sort());
 
 
@@ -27,6 +51,12 @@ const env = {
   EMAIL_FROM: process.env.EMAIL_FROM || 'DayTree <no-reply@daytree.paanipoorie.com>',
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
 };
+
+// Temporarily log JWT_SECRET diagnostics
+console.log('typeof process.env.JWT_SECRET:', typeof process.env.JWT_SECRET);
+console.log('process.env.JWT_SECRET?.length:', process.env.JWT_SECRET?.length);
+console.log('typeof env.JWT_SECRET:', typeof env.JWT_SECRET);
+console.log('env.JWT_SECRET?.length:', env.JWT_SECRET?.length);
 
 // Validate that critical env variables are present in production/production-like environments
 if (env.NODE_ENV === 'production') {
