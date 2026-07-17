@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback, useMemo } from "react";
 import { 
   loginUser, 
   signupUser, 
@@ -43,7 +43,7 @@ export function AuthProvider({ children }) {
     restoreSession();
   }, []);
 
-  async function login(credentials) {
+  const login = useCallback(async (credentials) => {
     setIsAuthLoading(true);
     setAuthError("");
 
@@ -58,9 +58,9 @@ export function AuthProvider({ children }) {
     } finally {
       setIsAuthLoading(false);
     }
-  }
+  }, [showSuccess, showError]);
 
-  async function signup(credentials) {
+  const signup = useCallback(async (credentials) => {
     setIsAuthLoading(true);
     setAuthError("");
 
@@ -75,9 +75,9 @@ export function AuthProvider({ children }) {
     } finally {
       setIsAuthLoading(false);
     }
-  }
+  }, [showSuccess, showError]);
 
-  async function loginWithGoogle(idToken) {
+  const loginWithGoogle = useCallback(async (idToken) => {
     setIsAuthLoading(true);
     setAuthError("");
 
@@ -92,9 +92,9 @@ export function AuthProvider({ children }) {
     } finally {
       setIsAuthLoading(false);
     }
-  }
+  }, [showSuccess, showError]);
 
-  async function verifyOtp(email, otp) {
+  const verifyOtp = useCallback(async (email, otp) => {
     setIsAuthLoading(true);
     setAuthError("");
     try {
@@ -108,9 +108,9 @@ export function AuthProvider({ children }) {
     } finally {
       setIsAuthLoading(false);
     }
-  }
+  }, [showSuccess, showError]);
 
-  async function resendOtpCode(email) {
+  const resendOtpCode = useCallback(async (email) => {
     setAuthError("");
     try {
       await resendOtp(email);
@@ -120,9 +120,9 @@ export function AuthProvider({ children }) {
       showError(err.message || "Failed to resend code.");
       throw err;
     }
-  }
+  }, [showSuccess, showError]);
 
-  async function logout() {
+  const logout = useCallback(async () => {
     abortAllActiveRequests();
     
     setIsAuthLoading(true);
@@ -136,9 +136,9 @@ export function AuthProvider({ children }) {
     } finally {
       setIsAuthLoading(false);
     }
-  }
+  }, [showSuccess]);
 
-  async function completeOnboarding(username, file) {
+  const completeOnboarding = useCallback(async (username, file) => {
     setIsAuthLoading(true);
     setAuthError("");
     try {
@@ -152,9 +152,9 @@ export function AuthProvider({ children }) {
     } finally {
       setIsAuthLoading(false);
     }
-  }
+  }, [showSuccess, showError]);
 
-  const value = {
+  const value = useMemo(() => ({
     user,
     isAuthenticated: Boolean(user),
     isAuthLoading,
@@ -166,7 +166,18 @@ export function AuthProvider({ children }) {
     loginWithGoogle,
     verifyOtp,
     resendOtpCode,
-  };
+  }), [
+    user,
+    isAuthLoading,
+    authError,
+    login,
+    signup,
+    logout,
+    completeOnboarding,
+    loginWithGoogle,
+    verifyOtp,
+    resendOtpCode
+  ]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

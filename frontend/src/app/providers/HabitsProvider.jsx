@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback, useMemo } from "react";
 import { 
   fetchHabits, 
   createHabitApi, 
@@ -44,7 +44,7 @@ export function HabitsProvider({ children }) {
     loadHabits();
   }, [isAuthenticated, user, showError]);
 
-  async function addHabit(formData) {
+  const addHabit = useCallback(async (formData) => {
     try {
       setError("");
       // Map frontend period 'time' to capitalized backend 'period'
@@ -60,10 +60,10 @@ export function HabitsProvider({ children }) {
       showError(message);
       throw err;
     }
-  }
+  }, [success, showError]);
 
   // Toggle habit completion on the backend
-  async function toggleHabit(habitId) {
+  const toggleHabit = useCallback(async (habitId) => {
     const today = getDateKey();
     try {
       setError("");
@@ -103,9 +103,9 @@ export function HabitsProvider({ children }) {
       setError(message);
       showError(message);
     }
-  }
+  }, [success, showError]);
 
-  async function deleteHabit(habitId) {
+  const deleteHabit = useCallback(async (habitId) => {
     try {
       setError("");
       await deleteHabitApi(habitId);
@@ -119,16 +119,23 @@ export function HabitsProvider({ children }) {
       setError(message);
       showError(message);
     }
-  }
+  }, [success, showError]);
 
-  const value = {
+  const value = useMemo(() => ({
     habits,
     isLoading,
     error,
     addHabit,
     toggleHabit,
     deleteHabit,
-  };
+  }), [
+    habits,
+    isLoading,
+    error,
+    addHabit,
+    toggleHabit,
+    deleteHabit,
+  ]);
 
   return (
     <HabitsContext.Provider value={value}>{children}</HabitsContext.Provider>
