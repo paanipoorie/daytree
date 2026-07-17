@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/authContext";
 import MainLayout from "../layouts/MainLayout";
+import GrowingTree from "../../shared/components/GrowingTree";
 import LandingPage from "../../pages/LandingPage";
 import LoginPage from "../../features/auth/pages/LoginPage";
 import SignupPage from "../../features/auth/pages/SignupPage";
@@ -111,17 +112,13 @@ function AppRoutes() {
           justifyContent: 'center',
           alignItems: 'center',
           height: '90vh',
-          fontFamily: 'monospace',
-          fontSize: '1.5rem',
-          fontWeight: 'bold',
           backgroundColor: '#000',
-          color: '#fff',
           border: '4px solid #fff',
           boxSizing: 'border-box',
           margin: '2rem',
         }}
       >
-        Loading DayTree...
+        <GrowingTree />
       </div>
     );
   }
