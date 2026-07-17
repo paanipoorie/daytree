@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const compression = require('compression');
+const mongoose = require('mongoose');
 const mongoSanitize = require('express-mongo-sanitize');
 const errorHandler = require('./middleware/errorHandler');
 const env = require('./config/env');
@@ -17,6 +19,9 @@ app.set('trust proxy', 1);
 // Request Tracing (runs first to generate requestId)
 app.use(requestTracer);
 
+// Gzip Compression for responses
+app.use(compression());
+
 // Security Middlewares
 app.use(helmet());
 app.use(cors({
@@ -27,8 +32,8 @@ app.use(cors({
 // Apply general rate limiting to all api endpoints
 app.use('/api', generalLimiter);
 
-// Logging Middleware
-if (env.NODE_ENV !== 'test') {
+// Logging Middleware (only log morgan in development to prevent dev log clutter in production/tests)
+if (env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
@@ -39,15 +44,20 @@ app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 // Sanitize inputs to prevent MongoDB Operator Injection
 app.use(mongoSanitize());
 
-// Health check endpoint
-app.get('/api/v1/health', (req, res) => {
+// Health check endpoint handler
+const healthHandler = (req, res) => {
+  const isConnected = mongoose.connection.readyState === 1;
   res.status(200).json({
     status: 'ok',
-    uptime: process.uptime(),
+    database: isConnected ? 'connected' : 'disconnected',
     environment: env.NODE_ENV,
-    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
   });
-});
+};
+
+// Mount health check endpoints
+app.get('/health', healthHandler);
+app.get('/api/v1/health', healthHandler);
 
 // Import Routes
 const authRoutes = require('./routes/auth.routes');

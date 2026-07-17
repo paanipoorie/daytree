@@ -79,12 +79,13 @@ To ensure a smooth launch, follow this sequence:
    * `MONGODB_URI`: *Your Atlas connection string (replace `<password>` with the actual database user password)*
    * `JWT_SECRET`: *A secure random string (e.g. 64-character hex)*
    * `JWT_EXPIRES_IN`: `7d`
-   * `CORS_ORIGIN`: *Leave empty initially; you will update this to the Vercel frontend URL once deployed.*
+   * `FRONTEND_URL`: *The URL of your deployed frontend (e.g., `https://daytree.vercel.app`). Used for locking down CORS verification.*
+   * `CORS_ORIGIN`: *Fallback / alternative for FRONTEND_URL. (e.g., `http://localhost:5173` or matching frontend URL)*
    * `CLOUDINARY_CLOUD_NAME`: *Cloudinary cloud name*
    * `CLOUDINARY_API_KEY`: *Cloudinary API key*
    * `CLOUDINARY_API_SECRET`: *Cloudinary API secret*
    * `RESEND_API_KEY`: *Your Resend API key (e.g. re_xxxx)*
-   * `EMAIL_FROM`: *Your verified sender email address (e.g., `DayTree <noreply@yourdomain.com>`)*
+   * `EMAIL_FROM`: *Your verified sender email address (e.g., `"DayTree <no-reply@daytree.paanipoorie.com>"`)*
    * `GOOGLE_CLIENT_ID`: *Your Google OAuth Client ID for verification*
 5. **Deploy**: Click **Create Web Service**. Render will build and start the container. Copy the public URL (e.g., `https://daytree-backend.onrender.com`).
 
@@ -109,7 +110,7 @@ To ensure a smooth launch, follow this sequence:
 
 ### 🔄 Step 4: Lock Down CORS (Optional but Recommended)
 Go back to your **Render Web Service settings**, edit the environment variables, and update:
-* `CORS_ORIGIN`: `https://daytree.vercel.app` (your actual Vercel domain)
+* `FRONTEND_URL`: `https://daytree.vercel.app` (your actual Vercel domain)
 
 This restricts API usage to only your deployed frontend.
 

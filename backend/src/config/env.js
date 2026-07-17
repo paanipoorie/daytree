@@ -17,9 +17,9 @@ const env = {
   RATE_LIMIT_MAX: parseInt(process.env.RATE_LIMIT_MAX || '100', 10),
   AUTH_RATE_LIMIT_WINDOW_MS: parseInt(process.env.AUTH_RATE_LIMIT_WINDOW_MS || '900000', 10), // 15 mins
   AUTH_RATE_LIMIT_MAX: parseInt(process.env.AUTH_RATE_LIMIT_MAX || '15', 10),
-  CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  CORS_ORIGIN: process.env.FRONTEND_URL || process.env.CORS_ORIGIN || 'http://localhost:5173',
   RESEND_API_KEY: process.env.RESEND_API_KEY || '',
-  EMAIL_FROM: process.env.EMAIL_FROM || 'DayTree <noreply@yourdomain.com>',
+  EMAIL_FROM: process.env.EMAIL_FROM || 'DayTree <no-reply@daytree.paanipoorie.com>',
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
 };
 
@@ -27,8 +27,24 @@ const env = {
 if (env.NODE_ENV === 'production') {
   const missing = [];
   if (!process.env.MONGODB_URI) missing.push('MONGODB_URI');
-  if (!process.env.JWT_SECRET) missing.push('JWT_SECRET');
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'super_secret_daytree_jwt_key_123!') {
+    missing.push('JWT_SECRET');
+  }
   if (!process.env.RESEND_API_KEY) missing.push('RESEND_API_KEY');
+  if (!process.env.EMAIL_FROM) missing.push('EMAIL_FROM');
+  if (!process.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_CLOUD_NAME === 'default_cloud') {
+    missing.push('CLOUDINARY_CLOUD_NAME');
+  }
+  if (!process.env.CLOUDINARY_API_KEY || process.env.CLOUDINARY_API_KEY === 'default_api_key') {
+    missing.push('CLOUDINARY_API_KEY');
+  }
+  if (!process.env.CLOUDINARY_API_SECRET || process.env.CLOUDINARY_API_SECRET === 'default_api_secret') {
+    missing.push('CLOUDINARY_API_SECRET');
+  }
+  if (!process.env.GOOGLE_CLIENT_ID) missing.push('GOOGLE_CLIENT_ID');
+  if (!process.env.FRONTEND_URL && !process.env.CORS_ORIGIN) {
+    missing.push('FRONTEND_URL/CORS_ORIGIN');
+  }
   if (missing.length > 0) {
     throw new Error(`Missing critical production environment variables: ${missing.join(', ')}`);
   }

@@ -1,7 +1,7 @@
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 process.env.NODE_ENV = 'test';
 process.env.RESEND_API_KEY = 'mock-key';
-process.env.EMAIL_FROM = 'DayTree <noreply@yourdomain.com>';
+process.env.EMAIL_FROM = 'DayTree <no-reply@daytree.paanipoorie.com>';
 process.env.GOOGLE_CLIENT_ID = 'test-google-client-id';
 
 global.lastSentOtp = null;

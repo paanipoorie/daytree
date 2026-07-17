@@ -11,6 +11,7 @@ const habitCompletionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Habit',
       required: true,
+      index: true,
     },
     date: {
       type: String, // format: "YYYY-MM-DD"

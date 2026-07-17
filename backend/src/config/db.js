@@ -8,6 +8,17 @@ const connectDB = async () => {
     const sanitizedUri = rawUri ? rawUri.replace(/:([^@]+)@/, ':****@') : 'undefined';
     console.log(`MongoDB connection URI: ${sanitizedUri}`);
 
+    // Register connection status listeners
+    mongoose.connection.on('disconnected', () => {
+      console.warn('⚠️ MongoDB disconnected! Retrying connection...');
+    });
+    mongoose.connection.on('reconnected', () => {
+      console.log('✅ MongoDB reconnected successfully!');
+    });
+    mongoose.connection.on('error', (err) => {
+      console.error(`❌ MongoDB connection error: ${err.message}`);
+    });
+
     const conn = await mongoose.connect(rawUri, {
       serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds instead of hanging
     });

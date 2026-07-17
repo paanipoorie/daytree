@@ -15,8 +15,12 @@ const sendOtpEmail = async (email, otp) => {
     throw new Error(errMsg);
   }
 
-  const fromAddress = env.EMAIL_FROM || 'DayTree <noreply@yourdomain.com>';
-  console.log(`[Email Service]: Sent OTP ${otp} to ${email}`);
+  const fromAddress = env.EMAIL_FROM || 'DayTree <no-reply@daytree.paanipoorie.com>';
+  if (env.NODE_ENV !== 'production') {
+    console.log(`[Email Service]: Sent OTP ${otp} to ${email}`);
+  } else {
+    console.log(`[Email Service]: Sent OTP verification email to ${email}`);
+  }
 
   const htmlContent = `
     <!DOCTYPE html>
