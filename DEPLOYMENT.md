@@ -70,8 +70,9 @@ To ensure a smooth launch, follow this sequence:
    * **Name**: `daytree-backend`
    * **Region**: Choose the closest region to your database.
    * **Runtime**: `Node`
-   * **Build Command**: `cd backend && npm install`
-   * **Start Command**: `cd backend && npm start`
+   * **Root Directory**: `backend` (This is critical: it tells Render to run all commands and build steps inside the `backend` subdirectory)
+   * **Build Command**: `npm install`
+   * **Start Command**: `npm start`
 4. **Configure Environment Variables**:
    Click **Advanced** -> **Add Environment Variable** and add the following keys:
    * `NODE_ENV`: `production`
