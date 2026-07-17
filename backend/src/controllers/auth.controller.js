@@ -2,6 +2,7 @@ const authService = require('../services/auth.service');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const { logEvent } = require('../services/audit.service');
+const env = require('../config/env');
 
 /**
  * Handle user signup
@@ -165,3 +166,13 @@ exports.logout = asyncHandler(async (req, res, next) => {
 
   return sendSuccess(res, 'Logged out successfully', {}, 200);
 });
+
+/**
+ * Get public authentication configuration (Google Client ID)
+ */
+exports.getConfig = asyncHandler(async (req, res, next) => {
+  return sendSuccess(res, 'Authentication config retrieved successfully', {
+    googleClientId: env.GOOGLE_CLIENT_ID
+  }, 200);
+});
+

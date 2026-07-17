@@ -15,6 +15,7 @@ router.post('/send-otp', authLimiter, validate(sendOtpSchema), authController.se
 router.post('/verify-otp', authLimiter, validate(verifyOtpSchema), authController.verifyOtp);
 router.post('/resend-otp', authLimiter, validate(resendOtpSchema), authController.resendOtp);
 router.post('/google', authLimiter, validate(googleLoginSchema), authController.googleLogin);
+router.get('/config', authController.getConfig);
 
 // Protected routes
 router.get('/me', protect, authController.me);

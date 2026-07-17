@@ -1,10 +1,34 @@
 import { useEffect, useRef, useState } from "react";
+import { fetchAuthConfig } from "../services/authService";
 
 function AuthActions({ mode, onModeChange, onGoogleLogin }) {
   const isLogin = mode === "login";
   const googleBtnRef = useRef(null);
-  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
-  const [gisStatus, setGisStatus] = useState(() => (googleClientId ? "loading" : "error")); // "loading", "loaded", "error"
+  const [googleClientId, setGoogleClientId] = useState(() => import.meta.env.VITE_GOOGLE_CLIENT_ID || "");
+  const [gisStatus, setGisStatus] = useState("loading"); // "loading", "loaded", "error"
+
+  useEffect(() => {
+    let active = true;
+    if (!googleClientId) {
+      fetchAuthConfig()
+        .then((data) => {
+          if (active && data && data.googleClientId) {
+            setGoogleClientId(data.googleClientId);
+          } else if (active) {
+            setGisStatus("error");
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to load auth config:", err);
+          if (active) {
+            setGisStatus("error");
+          }
+        });
+    }
+    return () => {
+      active = false;
+    };
+  }, [googleClientId]);
 
   useEffect(() => {
     if (!googleClientId) {
@@ -12,7 +36,7 @@ function AuthActions({ mode, onModeChange, onGoogleLogin }) {
     }
 
     const checkGis = () => {
-      if (window.google) {
+      if (window.google && window.google.accounts && window.google.accounts.id) {
         setGisStatus("loaded");
       }
     };
@@ -23,7 +47,7 @@ function AuthActions({ mode, onModeChange, onGoogleLogin }) {
     const timeout = setTimeout(() => {
       clearInterval(interval);
       setGisStatus((prev) => (prev === "loaded" ? "loaded" : "error"));
-    }, 3000); // 3 seconds timeout
+    }, 5000); // 5 seconds timeout
 
     return () => {
       clearInterval(interval);
@@ -32,7 +56,7 @@ function AuthActions({ mode, onModeChange, onGoogleLogin }) {
   }, [googleClientId]);
 
   useEffect(() => {
-    if (gisStatus === "loaded" && googleBtnRef.current) {
+    if (gisStatus === "loaded" && googleBtnRef.current && googleClientId) {
       try {
         window.google.accounts.id.initialize({
           client_id: googleClientId,

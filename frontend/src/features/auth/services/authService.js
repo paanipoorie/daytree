@@ -137,3 +137,14 @@ export async function setupUserProfile(username, file) {
 
   return response.data.user;
 }
+
+/**
+ * Fetch public auth config (Google Client ID)
+ * @returns {Promise<Object>} config data
+ */
+export async function fetchAuthConfig() {
+  const response = await apiClient("/api/v1/auth/config", {
+    method: "GET",
+  });
+  return response.data;
+}

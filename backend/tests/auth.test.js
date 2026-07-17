@@ -488,6 +488,17 @@ describe('Auth API Integration Tests', () => {
     });
   });
 
+  describe('GET /api/v1/auth/config', () => {
+    it('returns the Google Client ID', async () => {
+      const res = await request(app)
+        .get('/api/v1/auth/config');
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data.googleClientId).toBe('test-google-client-id');
+    });
+  });
+
   describe('Full Profile Setup and Onboarding Flow', () => {
     let token;
     let email = 'onboarduser@example.com';
