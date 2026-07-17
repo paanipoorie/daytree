@@ -62,7 +62,7 @@ console.log('env.JWT_SECRET?.length:', env.JWT_SECRET?.length);
 if (env.NODE_ENV === 'production') {
   const missing = [];
   if (!process.env.MONGODB_URI) missing.push('MONGODB_URI');
-  if (!env.JWT_SECRET || env.JWT_SECRET === 'super_secret_daytree_jwt_key_123!') {
+  if (!process.env.JWT_SECRET) {
     missing.push('JWT_SECRET');
   }
   if (!process.env.RESEND_API_KEY) missing.push('RESEND_API_KEY');
