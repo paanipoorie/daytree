@@ -18,7 +18,7 @@ function SignupPage({ onModeChange }) {
 
   return (
     <>
-      <SEO title="Sign Up" />
+      <SEO title="Sign Up" robots="noindex, follow" description="Create a DayTree account to start building consistency and growing your personal tree of daily habits." />
       <AuthForm
         mode="signup"
         error={authError}

@@ -12,7 +12,7 @@ It is constructed with a highly structured, feature-based architecture and featu
 ![DayTree Dashboard](public/main-page.png)
 
 ### 2. Secure Authenticated Gate
-![DayTree Auth Portal](public/auth-tree.png)
+![DayTree Auth Portal](public/auth-tree.webp)
 
 ---
 

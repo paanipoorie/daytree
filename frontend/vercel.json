@@ -32,7 +32,7 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!api|assets|icons|robots\\.txt|sitemap\\.xml|site\\.webmanifest|.*\\.[a-zA-Z0-9]+$).*)$",
       "destination": "/index.html"
     }
   ]

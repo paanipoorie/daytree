@@ -1,0 +1,64 @@
+- generic [ref=f11e3]:
+  - banner [ref=f11e4]:
+    - generic [ref=f11e5]:
+      - link "DayTree" [ref=f11e6] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=f11e10]:
+        - link "Features" [ref=f11e11] [cursor=pointer]:
+          - /url: /features
+        - link "About" [ref=f11e12] [cursor=pointer]:
+          - /url: /about
+        - link "FAQ" [ref=f11e13] [cursor=pointer]:
+          - /url: /faq
+        - link "Blog" [ref=f11e14] [cursor=pointer]:
+          - /url: /blog
+      - generic [ref=f11e15]:
+        - link "Login" [ref=f11e16] [cursor=pointer]:
+          - /url: /login
+        - link "Get Started" [ref=f11e17] [cursor=pointer]:
+          - /url: /signup
+  - main [ref=f11e18]:
+    - generic [ref=f11e19]:
+      - heading "DayTree Blog" [level=1] [ref=f11e20]
+      - paragraph [ref=f11e21]: Insights on discipline, minimal design, and software engineering.
+      - generic [ref=f11e22]:
+        - article [ref=f11e23]:
+          - img "The Psychology of Brutalist Design in Productivity Tools" [ref=f11e25]
+          - generic [ref=f11e26]:
+            - generic [ref=f11e27]: By Paanipoorie Team • August 10, 2026
+            - heading [level=2] [ref=f11e28]:
+              - link "The Psychology of Brutalist Design in Productivity Tools" [ref=f11e29] [cursor=pointer]:
+                - /url: /blog/brutalist-design-productivity
+            - paragraph [ref=f11e30]: Discover why minimal, high-contrast brutalist user interfaces reduce cognitive load, eliminate distraction, and foster genuine daily discipline.
+            - link "READ ARTICLE" [ref=f11e31] [cursor=pointer]:
+              - /url: /blog/brutalist-design-productivity
+        - article [ref=f11e32]:
+          - img "How to Build a Backlog-Resilient Habit Loop" [ref=f11e34]
+          - generic [ref=f11e35]:
+            - generic [ref=f11e36]: By Paanipoorie Team • August 12, 2026
+            - heading [level=2] [ref=f11e37]:
+              - link "How to Build a Backlog-Resilient Habit Loop" [ref=f11e38] [cursor=pointer]:
+                - /url: /blog/backlog-resilient-habit-loop
+            - paragraph [ref=f11e39]: Learn why traditional streak-based habit tracking often leads to burnout and how a smart backlog system helps you maintain consistency without guilt.
+            - link "READ ARTICLE" [ref=f11e40] [cursor=pointer]:
+              - /url: /blog/backlog-resilient-habit-loop
+        - article [ref=f11e41]:
+          - 'img "Timezone-Safe Habit Tracking: Why Simple Dates Matter" [ref=f11e43]'
+          - generic [ref=f11e44]:
+            - generic [ref=f11e45]: By Paanipoorie Team • August 15, 2026
+            - heading [level=2] [ref=f11e46]:
+              - 'link "Timezone-Safe Habit Tracking: Why Simple Dates Matter" [ref=f11e47] [cursor=pointer]':
+                - /url: /blog/timezone-safe-habit-tracking
+            - paragraph [ref=f11e48]: Dive into the engineering challenges of managing timezone shifts in habit trackers and why storing dates as local YYYY-MM-DD strings is the ultimate solution.
+            - link "READ ARTICLE" [ref=f11e49] [cursor=pointer]:
+              - /url: /blog/timezone-safe-habit-tracking
+  - contentinfo [ref=f11e50]:
+    - generic [ref=f11e51]:
+      - paragraph [ref=f11e52]: © 2026 DayTree. All rights reserved.
+      - generic [ref=f11e53]:
+        - link "Privacy" [ref=f11e54] [cursor=pointer]:
+          - /url: /privacy
+        - link "Terms" [ref=f11e55] [cursor=pointer]:
+          - /url: /terms
+        - link "Github" [ref=f11e56] [cursor=pointer]:
+          - /url: https://github.com

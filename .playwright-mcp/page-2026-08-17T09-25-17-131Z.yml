@@ -1,0 +1,108 @@
+- generic [ref=f9e3]:
+  - banner [ref=f9e4]:
+    - generic [ref=f9e5]:
+      - link "DayTree" [ref=f9e6] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=f9e10]:
+        - link "Features" [ref=f9e11] [cursor=pointer]:
+          - /url: /features
+        - link "About" [ref=f9e12] [cursor=pointer]:
+          - /url: /about
+        - link "FAQ" [ref=f9e13] [cursor=pointer]:
+          - /url: /faq
+        - link "Blog" [ref=f9e14] [cursor=pointer]:
+          - /url: /blog
+      - generic [ref=f9e15]:
+        - link "Login" [ref=f9e16] [cursor=pointer]:
+          - /url: /login
+        - link "Get Started" [ref=f9e17] [cursor=pointer]:
+          - /url: /signup
+  - main [ref=f9e18]:
+    - generic [ref=f9e19]:
+      - generic [ref=f9e20]:
+        - generic [ref=f9e21]:
+          - heading "A Simple Habit Tracker for Daily Consistency" [level=1] [ref=f9e22]
+          - paragraph [ref=f9e23]: DayTree is a minimalist, brutalist habit tracking application designed for focus. Plan your day, track your consistency, and grow your personal tree of daily disciplines.
+          - generic [ref=f9e24]:
+            - link "Get Started" [ref=f9e25] [cursor=pointer]:
+              - /url: /signup
+            - link "Explore Features" [ref=f9e26] [cursor=pointer]:
+              - /url: /features
+        - generic [ref=f9e28]:
+          - generic [ref=f9e29]: daytree.paanipoorie.com/home
+          - img "DayTree Dashboard Preview" [ref=f9e35]
+      - generic [ref=f9e37]:
+        - heading "What is DayTree?" [level=2] [ref=f9e38]
+        - paragraph [ref=f9e39]: "DayTree is a modern habit-tracking web application built on the MERN stack. We strip away the gaming loops, bloated features, and noisy popups found in other platforms to give you a stark, clean, distraction-free environment. Our goal is simple: to help you build and maintain daily habits."
+        - heading "Daily Habit Tracking" [level=3] [ref=f9e40]
+        - paragraph [ref=f9e41]: DayTree divides your commitments by day. Instead of looking at an intimidating list of tasks, you focus solely on what needs to be done during the current day. It is a highly tactical tool designed to keep your daily focus razor-sharp.
+      - generic [ref=f9e42]:
+        - heading "Designed for consistency" [level=2] [ref=f9e43]
+        - paragraph [ref=f9e44]: Ditch the noise. Focus on what you actually do every day.
+        - generic [ref=f9e45]:
+          - generic [ref=f9e46]:
+            - img "Daily Habit Tracking Icon" [ref=f9e48]
+            - heading "Daily Habit Tracking" [level=3] [ref=f9e49]
+            - paragraph [ref=f9e50]: Focus purely on the current day's commitments. Clear your board every single day to build momentum.
+          - generic [ref=f9e51]:
+            - img "Backlog Management Icon" [ref=f9e53]
+            - heading "Habit Backlogs" [level=3] [ref=f9e54]
+            - paragraph [ref=f9e55]: Incomplete tasks automatically move to a backlog. No guilt, just smart rescheduling whenever you are ready.
+          - generic [ref=f9e56]:
+            - img "Heatmap Analytics Icon" [ref=f9e58]
+            - heading "Progress & Heatmaps" [level=3] [ref=f9e59]
+            - paragraph [ref=f9e60]: Visualize your progress over time with Github-inspired contribution matrices that display long-term consistency.
+          - generic [ref=f9e61]:
+            - img "Streak Tracking Icon" [ref=f9e63]
+            - heading "Habit Streaks" [level=3] [ref=f9e64]
+            - paragraph [ref=f9e65]: Monitor your active daily streaks and watch your commitment grow. Keep the chain unbroken.
+      - generic [ref=f9e67]:
+        - heading "Organizing Habits Throughout the Day" [level=2] [ref=f9e68]
+        - paragraph [ref=f9e69]:
+          - text: "Your energy flows differently from sunrise to sunset. DayTree allows you to organize your habits into four distinct periods of the day:"
+          - strong [ref=f9e70]: Morning, Afternoon, Evening, and Night
+          - text: . This scheduling helps you anchor habits to specific times of day, increasing the likelihood of successful completion.
+        - heading "How DayTree Works" [level=2] [ref=f9e71]
+        - paragraph [ref=f9e72]: "Building discipline is straightforward with our three-step cycle:"
+        - list [ref=f9e73]:
+          - listitem [ref=f9e74]:
+            - strong [ref=f9e75]: "Plan:"
+            - text: Create habits and assign them to Morning, Afternoon, Evening, or Night.
+          - listitem [ref=f9e76]:
+            - strong [ref=f9e77]: "Execute & Log:"
+            - text: Check off habits during their designated periods on your dashboard.
+          - listitem [ref=f9e78]:
+            - strong [ref=f9e79]: "Review:"
+            - text: View your streaks and complete heatmap analytics on your Tally board.
+      - generic [ref=f9e81]:
+        - generic [ref=f9e82]:
+          - heading "Why Use DayTree?" [level=2] [ref=f9e83]
+          - paragraph [ref=f9e84]: Unlike bloated productivity applications, DayTree doesn't waste your time. It loads instantly, runs securely, and keeps you focused. By using a guilt-free backlog instead of harsh penalties, we encourage consistent, long-term behavior modification over short-lived motivation spikes.
+        - generic [ref=f9e85]:
+          - heading "Quick FAQ" [level=2] [ref=f9e86]
+          - paragraph [ref=f9e87]:
+            - strong [ref=f9e88]: Is DayTree free?
+            - text: Yes, DayTree is 100% free and has no premium paywalls.
+          - paragraph [ref=f9e89]:
+            - strong [ref=f9e90]: Can I track streaks?
+            - text: Yes, we track both current active streaks and longest records.
+          - paragraph [ref=f9e91]:
+            - text: For more answers, visit our dedicated
+            - link "FAQ Page" [ref=f9e92] [cursor=pointer]:
+              - /url: /faq
+            - text: .
+      - generic [ref=f9e94]:
+        - heading "Ready to grow daily?" [level=2] [ref=f9e95]
+        - paragraph [ref=f9e96]: Create your free account and start tracking your path today.
+        - link "Create Free Account" [ref=f9e97] [cursor=pointer]:
+          - /url: /signup
+  - contentinfo [ref=f9e98]:
+    - generic [ref=f9e99]:
+      - paragraph [ref=f9e100]: © 2026 DayTree. All rights reserved.
+      - generic [ref=f9e101]:
+        - link "Privacy" [ref=f9e102] [cursor=pointer]:
+          - /url: /privacy
+        - link "Terms" [ref=f9e103] [cursor=pointer]:
+          - /url: /terms
+        - link "Github" [ref=f9e104] [cursor=pointer]:
+          - /url: https://github.com

@@ -20,7 +20,7 @@ function LoginPage({ onModeChange }) {
 
   return (
     <>
-      <SEO title="Login" />
+      <SEO title="Login" robots="noindex, follow" description="Log in to your DayTree account to track your daily habits and review consistency analytics." />
       <AuthForm
         mode="login"
         error={authError}

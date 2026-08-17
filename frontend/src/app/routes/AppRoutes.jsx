@@ -10,6 +10,18 @@ import ProfileSetupPage from "../../features/auth/pages/ProfileSetupPage";
 import HomePage from "../../features/habits/pages/HomePage";
 import TallyPage from "../../features/tally/pages/TallyPage";
 import NotFoundPage from "../../pages/NotFoundPage";
+import AboutPage from "../../pages/AboutPage";
+import FeaturesPage from "../../pages/FeaturesPage";
+import FAQPage from "../../pages/FAQPage";
+import PrivacyPage from "../../pages/PrivacyPage";
+import TermsPage from "../../pages/TermsPage";
+import HabitTrackerPage from "../../pages/HabitTrackerPage";
+import DailyHabitTrackerPage from "../../pages/DailyHabitTrackerPage";
+import HabitTrackerForStudentsPage from "../../pages/HabitTrackerForStudentsPage";
+import HabitTrackerWithStreaksPage from "../../pages/HabitTrackerWithStreaksPage";
+import HabitTrackerWithAnalyticsPage from "../../pages/HabitTrackerWithAnalyticsPage";
+import BlogListPage from "../../pages/BlogListPage";
+import BlogPostPage from "../../pages/BlogPostPage";
 
 // Route guard for guest-only public pages (Landing, Login, Signup)
 function PublicRoute() {
@@ -147,6 +159,20 @@ function AppRoutes() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/tally" element={<TallyPage />} />
       </Route>
+
+      {/* Publicly Accessible Info Pages */}
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/features" element={<FeaturesPage />} />
+      <Route path="/faq" element={<FAQPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/terms" element={<TermsPage />} />
+      <Route path="/habit-tracker" element={<HabitTrackerPage />} />
+      <Route path="/daily-habit-tracker" element={<DailyHabitTrackerPage />} />
+      <Route path="/habit-tracker-for-students" element={<HabitTrackerForStudentsPage />} />
+      <Route path="/habit-tracker-with-streaks" element={<HabitTrackerWithStreaksPage />} />
+      <Route path="/habit-tracker-with-analytics" element={<HabitTrackerWithAnalyticsPage />} />
+      <Route path="/blog" element={<BlogListPage />} />
+      <Route path="/blog/:slug" element={<BlogPostPage />} />
 
       {/* Wildcard / 404 Route */}
       <Route path="*" element={<NotFoundPage />} />

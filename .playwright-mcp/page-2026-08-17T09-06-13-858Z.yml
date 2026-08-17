@@ -1,0 +1,67 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "DayTree" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e10]:
+        - link "Product" [ref=e11] [cursor=pointer]:
+          - /url: "#features"
+        - link "Features" [ref=e12] [cursor=pointer]:
+          - /url: "#features"
+        - link "About" [ref=e13] [cursor=pointer]:
+          - /url: "#about"
+      - generic [ref=e14]:
+        - link "Login" [ref=e15] [cursor=pointer]:
+          - /url: /login
+        - link "Get Started" [ref=e16] [cursor=pointer]:
+          - /url: /signup
+  - main [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - heading "Build better habits. One day at a time." [level=1] [ref=e20]:
+          - text: Build better habits.
+          - generic [ref=e21]: One day at a time.
+        - paragraph [ref=e22]: A minimal, brutalist habit tracker designed for high performers. Plan your day, track your consistency, and grow your personal tree of daily disciplines.
+        - generic [ref=e23]:
+          - link "Get Started" [ref=e24] [cursor=pointer]:
+            - /url: /signup
+          - link "Learn More" [ref=e25] [cursor=pointer]:
+            - /url: "#features"
+      - generic [ref=e27]:
+        - generic [ref=e28]: daytree.app/dashboard
+        - img "DayTree Dashboard Preview" [ref=e34]
+    - generic [ref=e35]:
+      - heading "Designed for consistency" [level=2] [ref=e36]
+      - paragraph [ref=e37]: Ditch the noise. Focus on what you actually do every day.
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - img "Daily Habit Tracking" [ref=e41]
+          - heading "Daily Habit Tracking" [level=3] [ref=e42]
+          - paragraph [ref=e43]: Focus purely on the current day's commitments. Clear your board every single day to build momentum.
+        - generic [ref=e44]:
+          - img "Backlog Management" [ref=e46]
+          - heading "Backlog Management" [level=3] [ref=e47]
+          - paragraph [ref=e48]: Incomplete tasks automatically move to backlog. No guilt, just smart rescheduling whenever you are ready.
+        - generic [ref=e49]:
+          - img "Heatmap Analytics" [ref=e51]
+          - heading "Heatmap Analytics" [level=3] [ref=e52]
+          - paragraph [ref=e53]: Visualize your progress over time with Github-inspired contribution matrices that display long-term consistency.
+        - generic [ref=e54]:
+          - img "Streak Tracking" [ref=e56]
+          - heading "Streak Tracking" [level=3] [ref=e57]
+          - paragraph [ref=e58]: Monitor your active daily streaks and watch your commitment grow. Keep the chain unbroken.
+    - generic [ref=e60]:
+      - heading "Ready to grow daily?" [level=2] [ref=e61]
+      - paragraph [ref=e62]: Create your free account and start tracking your path today.
+      - link "Create Free Account" [ref=e63] [cursor=pointer]:
+        - /url: /signup
+  - contentinfo [ref=e64]:
+    - generic [ref=e65]:
+      - paragraph [ref=e66]: © 2026 DayTree. All rights reserved.
+      - generic [ref=e67]:
+        - link "Privacy" [ref=e68] [cursor=pointer]:
+          - /url: "#features"
+        - link "Terms" [ref=e69] [cursor=pointer]:
+          - /url: "#features"
+        - link "Github" [ref=e70] [cursor=pointer]:
+          - /url: https://github.com

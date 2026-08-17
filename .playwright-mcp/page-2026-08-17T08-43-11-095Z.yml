@@ -1,0 +1,28 @@
+- main [ref=f2e3]:
+  - generic [ref=f2e4]:
+    - generic [ref=f2e5]:
+      - generic [ref=f2e6]: DayTree
+      - paragraph [ref=f2e9]: Grow daily. Stay consistent.
+      - heading "Sign In" [level=1] [ref=f2e10]
+      - paragraph [ref=f2e11]: Enter your credentials
+      - generic [ref=f2e12]:
+        - generic [ref=f2e13]: Email
+        - textbox "Email" [ref=f2e14]
+      - generic [ref=f2e15]:
+        - generic [ref=f2e16]:
+          - generic [ref=f2e17]: Password
+          - textbox "Password" [ref=f2e18]
+        - button "Show" [ref=f2e19] [cursor=pointer]
+      - generic [ref=f2e20]:
+        - generic [ref=f2e21]:
+          - checkbox "Remember me" [ref=f2e22]
+          - text: Remember me
+        - button "Forgot Password?" [ref=f2e23] [cursor=pointer]
+      - button "Sign In" [ref=f2e24] [cursor=pointer]
+      - strong [ref=f2e27]: OR
+      - generic [ref=f2e29]: Loading Google Sign-In…
+      - paragraph [ref=f2e31]:
+        - text: No account?
+        - button "Create One" [ref=f2e32] [cursor=pointer]
+    - complementary "DayTree growth preview" [ref=f2e33]:
+      - img "DayTree growth visual" [ref=f2e34]

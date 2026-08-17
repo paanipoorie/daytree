@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-function SEO({ title, description, noindex = false }) {
+function SEO({ title, description, noindex = false, robots }) {
   const location = useLocation();
 
   useEffect(() => {
@@ -37,11 +37,13 @@ function SEO({ title, description, noindex = false }) {
     setMetaTag("name", "description", activeDesc);
 
     // 3. Robots
-    if (noindex) {
-      setMetaTag("name", "robots", "noindex, nofollow");
-    } else {
-      setMetaTag("name", "robots", "index, follow");
+    let robotsValue = "index, follow";
+    if (robots) {
+      robotsValue = robots;
+    } else if (noindex) {
+      robotsValue = "noindex, nofollow";
     }
+    setMetaTag("name", "robots", robotsValue);
 
     // 4. Canonical URL
     const baseUrl = "https://daytree.paanipoorie.com";
@@ -53,14 +55,14 @@ function SEO({ title, description, noindex = false }) {
     setMetaTag("property", "og:description", activeDesc);
     setMetaTag("property", "og:url", canonicalUrl);
     setMetaTag("property", "og:type", "website");
-    setMetaTag("property", "og:image", `${baseUrl}/auth-tree.png`);
+    setMetaTag("property", "og:image", `${baseUrl}/auth-tree.webp`);
 
     // 6. Twitter
     setMetaTag("name", "twitter:card", "summary_large_image");
     setMetaTag("name", "twitter:title", title ? `${title} | DayTree` : baseTitle);
     setMetaTag("name", "twitter:description", activeDesc);
-    setMetaTag("name", "twitter:image", `${baseUrl}/auth-tree.png`);
-  }, [title, description, noindex, location.pathname]);
+    setMetaTag("name", "twitter:image", `${baseUrl}/auth-tree.webp`);
+  }, [title, description, noindex, robots, location.pathname]);
 
   return null;
 }
