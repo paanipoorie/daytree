@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /home
+Disallow: /tally
+Disallow: /profile-setup
+Disallow: /verify-email
+
+Sitemap: https://daytree.paanipoorie.com/sitemap.xml

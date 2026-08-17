@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../app/providers/authContext";
 import AuthTreePanel from "../components/AuthTreePanel";
 import BrandMark from "../../../shared/components/BrandMark";
+import SEO from "../../../shared/components/SEO";
 
 function ProfileSetupPage() {
   const { completeOnboarding, user, isAuthLoading, authError } = useAuth();
@@ -39,6 +40,7 @@ function ProfileSetupPage() {
 
   return (
     <main className="auth-shell">
+      <SEO title="Profile Setup" noindex={true} />
       <section className="auth-frame">
         <form className="auth-card" onSubmit={handleSubmit}>
           <BrandMark size="medium" />

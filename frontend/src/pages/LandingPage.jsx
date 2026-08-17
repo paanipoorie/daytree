@@ -1,9 +1,32 @@
 import { Link } from "react-router-dom";
 import BrandMark from "../shared/components/BrandMark";
+import SEO from "../shared/components/SEO";
 
 function LandingPage() {
   return (
     <div className="landing-shell">
+      <SEO 
+        title="Build Better Habits, One Day at a Time" 
+        description="A minimal, brutalist habit tracker designed for high performers. Plan your day, track your consistency, and grow your personal tree of daily disciplines." 
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "DayTree",
+            "operatingSystem": "All",
+            "applicationCategory": "ProductivityApplication",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "description": "A minimal, brutalist habit tracker designed for high performers. Plan your day, track your consistency, and grow your personal tree of daily disciplines."
+          })
+        }}
+      />
       {/* Landing Navbar */}
       <header className="landing-header">
         <div className="landing-header-container">
@@ -22,9 +45,11 @@ function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="landing-hero">
-        <div className="hero-content">
+      {/* Main Content */}
+      <main className="landing-main">
+        {/* Hero Section */}
+        <section className="landing-hero">
+          <div className="hero-content">
           <h1 className="hero-title">
             Build better habits.<br />
             <span>One day at a time.</span>
@@ -51,6 +76,8 @@ function LandingPage() {
                 src="/main-page.png" 
                 alt="DayTree Dashboard Preview" 
                 className="dashboard-preview-img"
+                width="1920"
+                height="1200"
               />
             </div>
           </div>
@@ -65,28 +92,28 @@ function LandingPage() {
         <div className="feature-grid">
           <div className="feature-card">
             <div className="feature-icon">
-              <img src="/icons/calendar.png" alt="Daily Habit Tracking" />
+              <img src="/icons/calendar.png" alt="Daily Habit Tracking" loading="lazy" width="750" height="750" />
             </div>
             <h3>Daily Habit Tracking</h3>
             <p>Focus purely on the current day's commitments. Clear your board every single day to build momentum.</p>
           </div>
           <div className="feature-card">
             <div className="feature-icon">
-              <img src="/icons/backlog.png" alt="Backlog Management" />
+              <img src="/icons/backlog.png" alt="Backlog Management" loading="lazy" width="750" height="750" />
             </div>
             <h3>Backlog Management</h3>
             <p>Incomplete tasks automatically move to backlog. No guilt, just smart rescheduling whenever you are ready.</p>
           </div>
           <div className="feature-card">
             <div className="feature-icon">
-              <img src="/icons/heatmap.png" alt="Heatmap Analytics" />
+              <img src="/icons/heatmap.png" alt="Heatmap Analytics" loading="lazy" width="750" height="750" />
             </div>
             <h3>Heatmap Analytics</h3>
             <p>Visualize your progress over time with Github-inspired contribution matrices that display long-term consistency.</p>
           </div>
           <div className="feature-card">
             <div className="feature-icon">
-              <img src="/icons/streak.png" alt="Streak Tracking" />
+              <img src="/icons/streak.png" alt="Streak Tracking" loading="lazy" width="750" height="750" />
             </div>
             <h3>Streak Tracking</h3>
             <p>Monitor your active daily streaks and watch your commitment grow. Keep the chain unbroken.</p>
@@ -102,6 +129,7 @@ function LandingPage() {
           <Link to="/signup" className="btn-primary cta-btn">Create Free Account</Link>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="landing-footer">

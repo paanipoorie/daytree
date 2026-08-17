@@ -3,6 +3,7 @@ import AnalyticsSummary from "../components/AnalyticsSummary";
 import HeatmapGrid from "../components/HeatmapGrid";
 import ProfileOverview from "../components/ProfileOverview";
 import { useTallyAnalytics } from "../hooks/useTallyAnalytics";
+import SEO from "../../../shared/components/SEO";
 
 function TallyPage() {
   const { user } = useAuth();
@@ -19,6 +20,7 @@ function TallyPage() {
 
   return (
     <main className="tally-shell">
+      <SEO title="Tally & Analytics" noindex={true} />
       <ProfileOverview user={user} />
 
       {error && <p className="form-error" style={{ textAlign: "center", margin: "1rem" }}>{error}</p>}

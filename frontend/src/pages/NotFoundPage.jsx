@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../app/providers/authContext";
+import SEO from "../shared/components/SEO";
 
 function NotFoundPage() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="not-found-shell">
+    <main className="not-found-shell">
+      <SEO title="Page Not Found" noindex={true} />
       <div className="not-found-card">
         <h1>404</h1>
         <h2>Page Not Found</h2>
@@ -14,7 +16,7 @@ function NotFoundPage() {
           Go Back Home
         </Link>
       </div>
-    </div>
+    </main>
   );
 }
 

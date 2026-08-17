@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../app/providers/authContext";
 import BrandMark from "../../../shared/components/BrandMark";
 import AuthTreePanel from "../components/AuthTreePanel";
+import SEO from "../../../shared/components/SEO";
 
 function VerifyEmailPage() {
   const { user, verifyOtp, resendOtpCode, logout, isAuthLoading } = useAuth();
@@ -11,17 +12,11 @@ function VerifyEmailPage() {
   
   const email = searchParams.get("email") || user?.email || "";
   const [otp, setOtp] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(email ? "" : "No email address provided. Please go back to login.");
   const [infoMessage, setInfoMessage] = useState("");
   const [isResending, setIsResending] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [countdown, setCountdown] = useState(60);
-
-  useEffect(() => {
-    if (!email) {
-      setError("No email address provided. Please go back to login.");
-    }
-  }, [email]);
 
   useEffect(() => {
     if (countdown > 0) {
@@ -82,6 +77,7 @@ function VerifyEmailPage() {
 
   return (
     <main className="auth-shell">
+      <SEO title="Verify Email" noindex={true} />
       <section className="auth-frame">
         <form className="auth-card" onSubmit={handleSubmit}>
           <BrandMark size="medium" />

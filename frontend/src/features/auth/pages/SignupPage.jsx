@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../app/providers/authContext";
 import AuthForm from "../components/AuthForm";
+import SEO from "../../../shared/components/SEO";
 
 function SignupPage({ onModeChange }) {
   const { signup, loginWithGoogle, authError, isAuthLoading } = useAuth();
@@ -16,14 +17,17 @@ function SignupPage({ onModeChange }) {
   }
 
   return (
-    <AuthForm
-      mode="signup"
-      error={authError}
-      isLoading={isAuthLoading}
-      onSubmit={handleSubmit}
-      onGoogleSubmit={loginWithGoogle}
-      onModeChange={onModeChange}
-    />
+    <>
+      <SEO title="Sign Up" />
+      <AuthForm
+        mode="signup"
+        error={authError}
+        isLoading={isAuthLoading}
+        onSubmit={handleSubmit}
+        onGoogleSubmit={loginWithGoogle}
+        onModeChange={onModeChange}
+      />
+    </>
   );
 }
 

@@ -11,6 +11,7 @@ import {
 import { useClock } from "../hooks/useClock";
 import { isHabitBacklogged } from "../utils/backlogUtils";
 import { useAuth } from "../../../app/providers/authContext";
+import SEO from "../../../shared/components/SEO";
 
 function HomePage() {
   const now = useClock();
@@ -63,6 +64,7 @@ function HomePage() {
 
   return (
     <main className="home-shell">
+      <SEO title="Dashboard" noindex={true} />
       <aside className="control-panel">
         <HabitForm onAddHabit={handleAddHabit} />
 

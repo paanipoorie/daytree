@@ -868,6 +868,10 @@ select:focus-visible {
   flex-direction: column;
 }
 
+.landing-main {
+  flex: 1;
+}
+
 .landing-header {
   border-bottom: 3px solid #000;
   background: #fff;

@@ -1,0 +1,9 @@
+# DayTree
+
+> A minimal, brutalist habit tracker designed for high performers. Plan your day, track your consistency, and grow your personal tree of daily disciplines.
+
+## Core Navigation
+
+- [Landing Page](https://daytree.paanipoorie.com/): The homepage of the app explaining product features and value.
+- [Login Page](https://daytree.paanipoorie.com/login): Log in to your DayTree account.
+- [Signup Page](https://daytree.paanipoorie.com/signup): Create a free account.
