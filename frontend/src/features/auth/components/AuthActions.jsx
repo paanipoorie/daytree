@@ -1,18 +1,36 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchAuthConfig } from "../services/authService";
 
+const CLIENT_ID_KEY = "daytree_google_client_id";
+
+// Check if GIS is already loaded
+const isGisLoaded = () => {
+  return !!(window.google && window.google.accounts && window.google.accounts.id);
+};
+
+// Retrieve client ID with compile-time environment variable or persistent run-time cache
+const getInitialGoogleClientId = () => {
+  return import.meta.env.VITE_GOOGLE_CLIENT_ID || localStorage.getItem(CLIENT_ID_KEY) || "";
+};
+
+// Module-level cache to persist Google Client ID across component mounts
+let cachedGoogleClientId = getInitialGoogleClientId();
+
 function AuthActions({ mode, onModeChange, onGoogleLogin }) {
   const isLogin = mode === "login";
   const googleBtnRef = useRef(null);
-  const [googleClientId, setGoogleClientId] = useState(() => import.meta.env.VITE_GOOGLE_CLIENT_ID || "");
-  const [gisStatus, setGisStatus] = useState("loading"); // "loading", "loaded", "error"
+  const [googleClientId, setGoogleClientId] = useState(() => cachedGoogleClientId);
+  const [gisStatus, setGisStatus] = useState(() => isGisLoaded() ? "loaded" : "loading");
 
+  // Effect to retrieve Google Client ID if missing
   useEffect(() => {
     let active = true;
     if (!googleClientId) {
       fetchAuthConfig()
         .then((data) => {
           if (active && data && data.googleClientId) {
+            cachedGoogleClientId = data.googleClientId;
+            localStorage.setItem(CLIENT_ID_KEY, data.googleClientId);
             setGoogleClientId(data.googleClientId);
           } else if (active) {
             setGisStatus("error");
@@ -30,31 +48,65 @@ function AuthActions({ mode, onModeChange, onGoogleLogin }) {
     };
   }, [googleClientId]);
 
+  // Effect to load the Google Identity Services SDK script dynamically and track its load state
   useEffect(() => {
     if (!googleClientId) {
       return;
     }
 
-    const checkGis = () => {
-      if (window.google && window.google.accounts && window.google.accounts.id) {
+    if (isGisLoaded()) {
+      setGisStatus("loaded");
+      return;
+    }
+
+    let script = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+    if (!script) {
+      script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+
+    const handleLoad = () => {
+      if (isGisLoaded()) {
         setGisStatus("loaded");
       }
     };
-    
-    checkGis();
-    const interval = setInterval(checkGis, 200);
+
+    const handleError = () => {
+      setGisStatus("error");
+    };
+
+    script.addEventListener("load", handleLoad);
+    script.addEventListener("error", handleError);
+
+    // Dynamic polling fallback (checks every 100ms for faster load response)
+    const checkInterval = setInterval(() => {
+      if (isGisLoaded()) {
+        setGisStatus("loaded");
+        clearInterval(checkInterval);
+      }
+    }, 100);
 
     const timeout = setTimeout(() => {
-      clearInterval(interval);
-      setGisStatus((prev) => (prev === "loaded" ? "loaded" : "error"));
+      clearInterval(checkInterval);
+      if (!isGisLoaded()) {
+        setGisStatus("error");
+      }
     }, 5000); // 5 seconds timeout
 
     return () => {
-      clearInterval(interval);
+      if (script) {
+        script.removeEventListener("load", handleLoad);
+        script.removeEventListener("error", handleError);
+      }
+      clearInterval(checkInterval);
       clearTimeout(timeout);
     };
   }, [googleClientId]);
 
+  // Effect to initialize and render the Google button when loaded
   useEffect(() => {
     if (gisStatus === "loaded" && googleBtnRef.current && googleClientId) {
       try {
