@@ -10,7 +10,8 @@ const isGisLoaded = () => {
 
 // Retrieve client ID with compile-time environment variable or persistent run-time cache
 const getInitialGoogleClientId = () => {
-  return import.meta.env.VITE_GOOGLE_CLIENT_ID || localStorage.getItem(CLIENT_ID_KEY) || "";
+  const rawId = import.meta.env.VITE_GOOGLE_CLIENT_ID || localStorage.getItem(CLIENT_ID_KEY) || "";
+  return typeof rawId === "string" ? rawId.trim() : "";
 };
 
 // Module-level cache to persist Google Client ID across component mounts
@@ -29,9 +30,10 @@ function AuthActions({ mode, onModeChange, onGoogleLogin }) {
       fetchAuthConfig()
         .then((data) => {
           if (active && data && data.googleClientId) {
-            cachedGoogleClientId = data.googleClientId;
-            localStorage.setItem(CLIENT_ID_KEY, data.googleClientId);
-            setGoogleClientId(data.googleClientId);
+            const cleanId = data.googleClientId.trim();
+            cachedGoogleClientId = cleanId;
+            localStorage.setItem(CLIENT_ID_KEY, cleanId);
+            setGoogleClientId(cleanId);
           } else if (active) {
             setGisStatus("error");
           }
